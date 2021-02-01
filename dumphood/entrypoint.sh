@@ -37,4 +37,4 @@ export default authorId([
 ]);
 EOF1
 npm run update
-mv dump/* /out
+mv dump /__w/
