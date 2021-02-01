@@ -1,0 +1,115 @@
+extend page
+
+block meta
+  meta(property="description" content=site.description)
+  meta(name="og:url"         content=site.site_url + 'stats/')
+  meta(name="og:image"       content=helpers.bust("/image.png"))
+  meta(name="og:title"       content=title)
+  meta(name="og:description" content=site.description)
+
+block headerTitle
+  span.hidden-xs
+    a(href="/")= underhood.name
+    br.visible-sm
+    small.hidden-sm &nbsp;&middot;&nbsp;
+  small Статистика
+
+block content
+  - var tweetsCountsArr = stats.map(function(author) { return author.tweets; });
+  - var maxTweets = Math.max.apply(Math, tweetsCountsArr);
+
+  .content
+    .container.js-stats
+      .row
+        .col-md-12
+          span.small.pull-right.text-muted
+            = "Последнее обновление: "
+            span.js-last-updated(data-timestamp=lastUpdated.raw)= lastUpdated()
+
+      .row
+        .col-md-12
+          table.host-stats
+            thead.host-stats__head
+              tr.host-stats__row.host-stats__row_head
+                th.host-stats__col.host-stats__col_left: span.sortable Автор
+                th.host-stats__col.col__author: span.sortable Читатели
+                th.host-stats__col: span.sortable Твиты
+                th.host-stats__col: span.tweet-stats.tweet-stats_own.sortable Написано
+                th.host-stats__col: span.tweet-stats.tweet-stats_retweets.sortable Ретвитнуто
+                th.host-stats__col: span.tweet-stats.tweet-stats_replies.sortable Отвечено
+                th.host-stats__col.host-stats__col_retweeted.rted--1p.hidden-sm: nobr
+                  span.sortable Ретвитнули всего
+                th.hidden-sm.hidden-md
+                  span.small.text-muted /
+                th.host-stats__col.host-stats__col_retweeted.rted--2p.hidden-sm.hidden-md: span.sortable: nobr на твит
+                th.host-stats__col.host-stats__col_favorited.faved--1p.hidden-sm: nobr
+                  span.sortable Лайкнули всего
+                th.hidden-sm.hidden-md
+                  span.small.text-muted /
+                th.host-stats__col.host-stats__col_favorited.faved--2p.hidden-sm.hidden-md: span.sortable: nobr на твит
+
+            each author, index in stats
+              - var isLive = currentAuthor && currentAuthor.username === author.username;
+
+              tr.host-stats__row
+                td.host-stats__col.host-stats__col_left.col__author(data-title='Автор' data-sort=index)
+                  span.cell
+                    - var authorLink = (isLive) ? 'https://twitter.com/' + underhood.name : '/' + author.username;
+                    .text-ellipsis
+                      a(href=authorLink class={ live: isLive })
+                        = "@" + author.username
+                    if author.info.location
+                      .text-ellipsis
+                        span.small.text-muted
+                          span.glyphicon.glyphicon-map-marker
+                          = " " + author.info.location
+
+                  - var percent = Math.round(author.tweets / maxTweets * 100)
+                  .tweet-graph__wrap.hidden-xs
+                    .tweet-graph(style='width: #{percent}%')
+                      .tweet-graph__bar.tweet-graph__bar_own( style='width: #{author.own.percent}%;' )
+                      .tweet-graph__bar.tweet-graph__bar_retweets(style='width: #{author.retweets.percent}%;')
+                      .tweet-graph__bar.tweet-graph__bar_replies( style='width: #{author.replies.percent}%;' )
+
+                td.host-stats__col(data-title='Читатели' data-sort=author.gainedFollowers class={
+                  'text-muted': author.gainedFollowers === 0,
+                  'text-success': author.gainedFollowers > 0,
+                  'text-danger': author.gainedFollowers < 0
+                })
+                  span.cell.nowrap(class={ 'cell--best': author.maxGainedfollowers }): span.cell__content
+                    if author.gainedFollowers !== 0
+                      = author.gainedFollowers > 0 ? '+' : '−'
+                    = Math.abs(author.gainedFollowers)
+                    if author.diffFollowers
+                      .text-center: small.text-muted
+                        span.cell.cell--small(class={ 'cell--best': author.maxDiffFollowersGain } title="Пришли"): span.cell__content
+                          = '+' + author.diffFollowers.gain
+                        span /
+                        span.cell.cell--small(class={ 'cell--best': author.maxDiffFollowersLoss } title="Ушли"): span.cell__content
+                          = '−' + author.diffFollowers.loss
+                td.host-stats__col(data-title='Твиты' data-sort=author.tweets)
+                  span.cell(class={ 'cell--best': author.maxTweets } ): span.cell__content
+                    = author.tweets
+                td.host-stats__col(data-title='Написано' data-sort=author.own.total)
+                  span.cell(class={ 'cell--best': author.maxOwnTotal }): span.cell__content
+                    = author.own.total
+                td.host-stats__col(data-title='Ретвитнуто' data-sort=author.retweets.total)
+                  span.cell(class={ 'cell--best': author.maxRetweetsTotal }): span.cell__content
+                    = author.retweets.total
+                td.host-stats__col(data-title='Отвечено' data-sort=author.replies.total)
+                  span.cell(class={ 'cell--best': author.maxRepliesTotal }): span.cell__content
+                    = author.replies.total
+                td.host-stats__col.host-stats__col_kpi.rted--1p.hidden-sm(data-title='Ретвитнули всего' data-sort=author.retweeted.total)
+                  span.cell(class={ 'cell--best': author.maxRetweetedTotal }): span.cell__content
+                    = author.retweeted.total
+                td.hidden-sm.hidden-md
+                td.host-stats__col.host-stats__col_kpi.rted--2p.hidden-sm(data-title='Ретвитнули на 1 твит' data-sort=author.retweeted.average)
+                  span.cell(class={ 'cell--best': author.maxRetweetedAverage }): span.cell__content
+                    = author.retweeted.average
+                td.host-stats__col.host-stats__col_kpi.faved--1p.hidden-sm.hidden-md(data-title='Лайкнули всего' data-sort=author.favorited.total)
+                  span.cell(class={ 'cell--best': author.maxFavoritedTotal }): span.cell__content
+                    = author.favorited.total
+                td.hidden-sm.hidden-md
+                td.host-stats__col.host-stats__col_kpi.faved--2p.hidden-sm.hidden-md(data-title='Лайкнули на 1 твит' data-sort=author.favorited.average)
+                  span.cell(class={ 'cell--best': author.maxFavoritedAverage }): span.cell__content
+                    = author.favorited.average

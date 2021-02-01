@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+dist
+.DS_Store
+dump/images/original/
+dump/images/*.tmp.*
+*.tmp*
+
+.vscode/
