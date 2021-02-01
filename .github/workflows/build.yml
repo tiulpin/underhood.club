@@ -1,46 +1,34 @@
 name: build
 
-on: [push, pull_request]
+on:
+  workflow_dispatch:
+    inputs:
+      username:
+        description: 'Author Twitter username'
+        default: 'silyutinaolga'
+        required: true
+      tweet:
+        description: 'The first tweet URL'
+        default: 'https://twitter.com/dsunderhood/status/1351064464431443970'
+        required: true
 
 jobs:
-  build:
+  dumphood:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.8"]
-
+    container:
+      image: tiulpin/dumphood
+      env:
+        AUTHOR: ${{ github.event.inputs.username }}
+        TWEET: ${{ github.event.inputs.tweet }}
+        TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
+        TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}
+        TWITTER_ACCESS_TOKEN_KEY: ${{ secrets.TWITTER_ACCESS_TOKEN_KEY }}
+        TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+      volumes:
+        - ./dump:/out
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2.2.1
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install poetry
-      run: make download-poetry
-
-    - name: Set up cache
-      uses: actions/cache@v2.1.3
-      with:
-        path: .venv
-        key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
-    - name: Install dependencies
-      run: |
-        source "$HOME/.poetry/env"
-        poetry config virtualenvs.in-project true
-        poetry install
-
-    - name: Run safety checks
-      run: |
-        source "$HOME/.poetry/env"
-        STRICT=1 make check-safety
-
-    - name: Run style checks
-      run: |
-        source "$HOME/.poetry/env"
-        STRICT=1 make check-style
-
-    - name: Run tests
-      run: |
-        source "$HOME/.poetry/env"
-        make test
+      - run: bash entrypoint.sh
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ github.event.inputs.username }}
+          path: ./dump
