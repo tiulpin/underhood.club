@@ -1,4 +1,5 @@
 #!/bin/bash
+cd /
 IFS='/' read -r -a array <<< "$TWEET"
 echo "Getting $AUTHOR tweets from ${array[3]}..."
 cat > underhood.js << EOF1
@@ -37,4 +38,3 @@ export default authorId([
 ]);
 EOF1
 npm run update
-mv dump /__w/
