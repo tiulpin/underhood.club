@@ -1,4 +1,4 @@
-name: build
+name: '@underhood'
 
 on:
   workflow_dispatch:
@@ -14,6 +14,7 @@ on:
 
 jobs:
   dumphood:
+    name: '🗑 @dumphood'
     runs-on: ubuntu-latest
     container:
       image: tiulpin/dumphood
@@ -24,11 +25,35 @@ jobs:
         TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}
         TWITTER_ACCESS_TOKEN_KEY: ${{ secrets.TWITTER_ACCESS_TOKEN_KEY }}
         TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
-      volumes:
-        - ./dump:/out
     steps:
-      - run: bash entrypoint.sh
+      - run: bash /entrypoint.sh
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ github.event.inputs.username }}
-          path: ./dump
+          path: /dump
+
+  topichood:
+    name: '🎩 @topichood'
+    needs: dumphood
+    runs-on: ubuntu-latest
+    container:
+      image: tiulpin/topichood
+    steps:
+      - name: Download the latest dump
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ github.event.inputs.username }}
+          path: ${{ github.event.inputs.username }}
+      - run: topichood ${{ github.event.inputs.username }}
+
+  notionhood:
+    name: '📔 @notionhood'
+    needs: dumphood
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download the latest dump
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ github.event.inputs.username }}
+          path: dump
+      - run: ls -la
