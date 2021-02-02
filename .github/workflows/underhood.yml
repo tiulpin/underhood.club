@@ -19,22 +19,22 @@ jobs:
     steps:
       - run: touch underhood.txt
       - uses: actions/upload-artifact@v2
-        if: ${{ contains( ${{ github.event.inputs.tweet }}, 'itunderhood' ) }}
+        if: ${{ contains( github.event.inputs.tweet, 'itunderhood') }}
         with:
           name: itunderhood
           path: underhood.txt
       - uses: actions/upload-artifact@v2
-        if: ${{ contains( ${{ github.event.inputs.tweet }}, 'produnderhood' ) }}
+        if: ${{ contains(github.event.inputs.tweet, 'produnderhood') }}
         with:
           name: produnderhood
           path: underhood.txt
       - uses: actions/upload-artifact@v2
-        if: ${{ contains( ${{ github.event.inputs.tweet }}, 'mobileunderhood' ) }}
+        if: ${{ contains(github.event.inputs.tweet, 'mobileunderhood') }}
         with:
           name: mobileunderhood
           path: underhood.txt
       - uses: actions/upload-artifact@v2
-        if: ${{ contains( ${{ github.event.inputs.tweet }}, 'dsunderhood' ) }}
+        if: ${{ contains(github.event.inputs.tweet, 'dsunderhood') }}
         with:
           name: dsunderhood
           path: underhood.txt
