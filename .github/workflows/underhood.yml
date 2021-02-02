@@ -13,6 +13,28 @@ on:
         required: true
 
 jobs:
+  # stupid check to see what's underhood will be processed
+  itunderhood:
+    runs-on: ubuntu-latest
+    if: contains( ${{ github.event.inputs.tweet }}, 'itunderhood' )
+    steps:
+    - run: echo "itunderhood"
+  produnderhood:
+    runs-on: ubuntu-latest
+    if: contains( ${{ github.event.inputs.tweet }}, 'produnderhood' )
+    steps:
+    - run: echo "produnderhood"
+  mobileunderhood:
+    runs-on: ubuntu-latest
+    if: contains( ${{ github.event.inputs.tweet }}, 'mobileunderhood' )
+    steps:
+    - run: echo "produnderhood"
+  dsunderhood:
+    runs-on: ubuntu-latest
+    if: contains( ${{ github.event.inputs.tweet }}, 'dsunderhood' )
+    steps:
+    - run: echo "produnderhood"
+     
   dumphood:
     name: '🗑 @dumphood'
     runs-on: ubuntu-latest
