@@ -15,21 +15,6 @@ license = "Apache Software License 2.0"
 repository = "https://github.com/tiulpin/underhood.club"
 homepage = "https://github.com/tiulpin/underhood.club"
 
-# Keywords description https://python-poetry.org/docs/pyproject/#keywords
-keywords = []  # Update me
-
-# Pypi classifiers: https://pypi.org/classifiers/
-classifiers = [  # Update me
-  "Development Status :: 3 - Alpha",
-  "Intended Audience :: Developers",
-  "Operating System :: OS Independent",
-  "Topic :: Software Development :: Libraries :: Python Modules",
-]
-
-[tool.poetry.scripts]
-# Entry points for the package https://python-poetry.org/docs/pyproject/#scripts
-"overhood" = "overhood.__main__:app"
-
 [tool.poetry.dependencies]
 python = "^3.7"
 
