@@ -1,12 +1,8 @@
-name: '@underhood'
+name: '🔥 underhood'
 
 on:
   workflow_dispatch:
     inputs:
-      username:
-        description: 'Author Twitter username'
-        default: 'silyutinaolga'
-        required: true
       tweet:
         description: 'The first tweet URL'
         default: 'https://twitter.com/dsunderhood/status/1351064464431443970'
@@ -14,12 +10,12 @@ on:
 
 jobs:
   dumphood:
-    name: '🗑 @dumphood'
+    name: '🗑 dumphood'
     runs-on: ubuntu-latest
     container:
       image: tiulpin/dumphood
       env:
-        AUTHOR: ${{ github.event.inputs.username }}
+        AUTHOR: dump
         TWEET: ${{ github.event.inputs.tweet }}
         TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
         TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}
@@ -29,11 +25,11 @@ jobs:
       - run: bash /entrypoint.sh
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ github.event.inputs.username }}
+          name: dump
           path: /dump
 
   topichood:
-    name: '🎩 @topichood'
+    name: '🎩 topichood'
     needs: dumphood
     runs-on: ubuntu-latest
     container:
@@ -42,18 +38,51 @@ jobs:
       - name: Download the latest dump
         uses: actions/download-artifact@v2
         with:
-          name: ${{ github.event.inputs.username }}
-          path: ${{ github.event.inputs.username }}
-      - run: topichood ${{ github.event.inputs.username }}
+          name: dump
+          path: dump
+      - run: topichood dump > topics.txt
+      - uses: actions/upload-artifact@v2
+        if: ${{ contains( github.event.inputs.tweet, 'itunderhood') }}
+        with:
+          name: itunderhood
+          path: topics.txt
+      - uses: actions/upload-artifact@v2
+        if: ${{ contains(github.event.inputs.tweet, 'produnderhood') }}
+        with:
+          name: produnderhood
+          path: topics.txt
+      - uses: actions/upload-artifact@v2
+        if: ${{ contains(github.event.inputs.tweet, 'mobileunderhood') }}
+        with:
+          name: mobileunderhood
+          path: topics.txt
+      - uses: actions/upload-artifact@v2
+        if: ${{ contains(github.event.inputs.tweet, 'dsunderhood') }}
+        with:
+          name: dsunderhood
+          path: topics.txt
 
   notionhood:
-    name: '📔 @notionhood'
+    name: '📔 notionhood'
     needs: dumphood
     runs-on: ubuntu-latest
+    container:
+      image: tiulpin/notionhood
+      env:
+        TWEET: ${{ github.event.inputs.tweet }}
+        NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        CLOUDFLARE_ID: ${{ secrets.CLOUDFLARE_ID }}
+        CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+        IMGUR_API_ID: ${{ secrets.IMGUR_API_ID }}
+        IMGUR_API_SECRET: ${{ secrets.IMGUR_API_SECRET }}
+        itunderhood: '48354b2e5958490b9205bdd4a9dbea1f'
+        mobileunderhood: '18abf4c5ed894fa0b19eb028dea8fe16'
+        produnderhood: '18cadb761489433692bc0c56ab7356fe'
+        dsunderhood: '40040c5fb4f04fb2af8c61d9557547a3'
     steps:
       - name: Download the latest dump
         uses: actions/download-artifact@v2
         with:
-          name: ${{ github.event.inputs.username }}
+          name: dump
           path: dump
-      - run: ls -la
+      - run: notionhood dump/
