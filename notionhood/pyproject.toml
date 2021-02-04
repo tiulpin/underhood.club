@@ -14,7 +14,7 @@ spacy = "^3.0.1"
 python-dotenv = "^0.15.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^6.2"
 black = "^20.8b1"
 
 [tool.poetry.scripts]
