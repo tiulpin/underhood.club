@@ -9,6 +9,32 @@ on:
         required: true
 
 jobs:
+  # stupid check to see what's underhood will be processed
+  checkhood:
+    runs-on: ubuntu-latest
+    steps:
+      - run: touch underhood.txt
+      - uses: actions/upload-artifact@v2
+        if: ${{ contains( github.event.inputs.tweet, 'itunderhood') }}
+        with:
+          name: itunderhood
+          path: underhood.txt
+      - uses: actions/upload-artifact@v2
+        if: ${{ contains(github.event.inputs.tweet, 'produnderhood') }}
+        with:
+          name: produnderhood
+          path: underhood.txt
+      - uses: actions/upload-artifact@v2
+        if: ${{ contains(github.event.inputs.tweet, 'mobileunderhood') }}
+        with:
+          name: mobileunderhood
+          path: underhood.txt
+      - uses: actions/upload-artifact@v2
+        if: ${{ contains(github.event.inputs.tweet, 'dsunderhood') }}
+        with:
+          name: dsunderhood
+          path: underhood.txt
+     
   dumphood:
     name: '🗑 dumphood'
     runs-on: ubuntu-latest
