@@ -11,7 +11,31 @@ updates:
     allow:
       - dependency-type: "all"
     commit-message:
-      prefix: ":arrow_up:"
+      prefix: "🐍⬆️"
+  - package-ecosystem: "npm"
+    directory: "/dumphood/"
+    schedule:
+      interval: "daily"
+    allow:
+      - dependency-type: "all"
+    commit-message:
+      prefix: "👀⬆️"
+  - package-ecosystem: "pip"
+    directory: "/topichood/"
+    schedule:
+      interval: "daily"
+    allow:
+      - dependency-type: "all"
+    commit-message:
+      prefix: "🐍⬆️"
+  - package-ecosystem: "pip"
+    directory: "/notionhood/"
+    schedule:
+      interval: "daily"
+    allow:
+      - dependency-type: "all"
+    commit-message:
+      prefix: "🐍⬆️"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -19,4 +43,4 @@ updates:
     allow:
       - dependency-type: "all"
     commit-message:
-      prefix: ":arrow_up:"
+      prefix: "😼⬆️"
