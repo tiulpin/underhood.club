@@ -9,37 +9,11 @@ on:
         required: true
 
 jobs:
-  # stupid check to see what's underhood will be processed
-  checkhood:
-    runs-on: ubuntu-latest
-    steps:
-      - run: touch underhood.txt
-      - uses: actions/upload-artifact@v2
-        if: ${{ contains( github.event.inputs.tweet, 'itunderhood') }}
-        with:
-          name: itunderhood
-          path: underhood.txt
-      - uses: actions/upload-artifact@v2
-        if: ${{ contains(github.event.inputs.tweet, 'produnderhood') }}
-        with:
-          name: produnderhood
-          path: underhood.txt
-      - uses: actions/upload-artifact@v2
-        if: ${{ contains(github.event.inputs.tweet, 'mobileunderhood') }}
-        with:
-          name: mobileunderhood
-          path: underhood.txt
-      - uses: actions/upload-artifact@v2
-        if: ${{ contains(github.event.inputs.tweet, 'dsunderhood') }}
-        with:
-          name: dsunderhood
-          path: underhood.txt
-     
   dumphood:
     name: '🗑 dumphood'
     runs-on: ubuntu-latest
     container:
-      image: tiulpin/dumphood
+      image: ghcr.io/tiulpin/dumphood
       env:
         AUTHOR: dump
         TWEET: ${{ github.event.inputs.tweet }}
@@ -59,7 +33,7 @@ jobs:
     needs: dumphood
     runs-on: ubuntu-latest
     container:
-      image: tiulpin/topichood
+      image: ghcr.io/tiulpin/topichood
     steps:
       - name: Download the latest dump
         uses: actions/download-artifact@v2
@@ -93,7 +67,7 @@ jobs:
     needs: dumphood
     runs-on: ubuntu-latest
     container:
-      image: tiulpin/notionhood
+      image: ghcr.io/tiulpin/notionhood
       env:
         TWEET: ${{ github.event.inputs.tweet }}
         NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
