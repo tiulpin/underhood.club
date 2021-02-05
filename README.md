@@ -1,5 +1,7 @@
 # 🔥 [underhood.club](https://underhood.club/)
 
+The monorepo contains everything what's needed.
+
 <div align="center">
 
 ### All stacks badges
@@ -14,27 +16,36 @@
 [![Security: bandit](https://img.shields.io/badge/security-bandit-green.svg)](https://github.com/PyCQA/bandit)
 
 ## Node.js badges
+
 No badges!
 
 </div>
-TODO: add more README 
 
-Services:
+### Motivation
 
-- [`dumphood`](https://github.com/tiulpin/underhood.club/main/dumphood)
-- [`topichood`](https://github.com/tiulpin/underhood.club/main/topichood)
-- [`notionhood`](https://github.com/tiulpin/underhood.club/main/notionhood)
+I wanted a way of storing tweets per weeks, like [@abroadunderhood](http://abroadunderhood.ru), but I
+- don't want to host anything at all/spend resources for hostings
+- need a good way of editing existing pages
+- want it to look nice
+- am not a frontend-developer, know nothing about JavaScript and so on
+- can dockerize things and make them work
 
-Articles:
+That's why I've created three main containers, that help make a website like 🔥[underhood.club](https://underhood.club/)
+- [`dumphood`](https://github.com/tiulpin/underhood.club/main/dumphood) – downloading tweets using Twitter API
+- [`topichood`](https://github.com/tiulpin/underhood.club/main/topichood) – topic modeling on tweets
+- [`notionhood`](https://github.com/tiulpin/underhood.club/main/notionhood) – uploading already dumped tweets to Notion with a bit of NLP (NER for finding pages names)
+
+### Articles
 
 - 🇬🇧 This README 
-- 🇷🇺 [The blogpost about the whole project](https://vas3k.club/project/4060/)
+- 🇷🇺 [The blogpost about the whole project](https://vas3k.club/project/4060/) (a bit outdated, will be updated soon)
 
 ## 🛡 License
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftiulpin%2Funderhood.club.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftiulpin%2Funderhood.club?ref=badge_large)
 
-## Credits
-
-TODO: add more credits
-- [`python-package-template`](https://github.com/TezRomacH/python-package-template).
+## 🙏 Thanks
+- to all authors at [@mobileunderhood](https://twitter.com/mobileunderhood), [@produnderhood](https://twitter.com/produnderhood), [@itunderhood](https://twitter.com/iunderhood), [@dsunderhood](https://twitter.com/dsunderhood) for the great content, without it the website would not be that good
+- [`notion-py`](http://github.com/jamalex/notion-py/) – the project could not exist without this particular library
+- [`anyunderhood`](https://github.com/anyunderhood/anyunderhood) – the template is the base of `dumphood` image for tweets downloading
+- [`python-package-template`](https://github.com/TezRomacH/python-package-template) – got some GitHub configs/dependencies from there
