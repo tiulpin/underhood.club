@@ -1,6 +1,6 @@
-from typing import Dict, List, Optional, Set, Tuple, Type, Union
+from typing import Dict, FrozenSet, List, Optional, Set, Tuple, Type, Union
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
 from time import sleep
@@ -29,16 +29,14 @@ from ujson import loads
 class LocalConfig:  # 🇷🇺
     week_title: str = "Архив недели"
     links_title: str = "Ссылки"
-    days: List[str] = field(
-        default_factory=lambda: [
-            "Понедельник",
-            "Вторник",
-            "Среда",
-            "Четверг",
-            "Пятница",
-            "Суббота",
-            "Воскресенье",
-        ]
+    days: FrozenSet[str] = (
+        "Понедельник",
+        "Вторник",
+        "Среда",
+        "Четверг",
+        "Пятница",
+        "Суббота",
+        "Воскресенье",
     )
     td = timedelta(hours=3)
 
@@ -149,7 +147,6 @@ class Notionhood:
     def add(
         self, o: Type, content: Optional[str] = None
     ) -> Union[CollectionViewBlock, EmbedBlock, BookmarkBlock]:
-        b = BasicBlock
         b = (
             self.page.children.add_new(o, title=content)
             if content

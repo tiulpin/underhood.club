@@ -235,12 +235,11 @@ python-versions = "*"
 
 [[package]]
 name = "notion"
-version = "0.0.27"
+version = "0.0.28"
 description = "Unofficial Python API client for Notion.so"
 category = "main"
 optional = false
 python-versions = ">=3.5"
-develop = true
 
 [package.dependencies]
 bs4 = "*"
@@ -250,12 +249,6 @@ dictdiffer = "*"
 python-slugify = "*"
 requests = "*"
 tzlocal = "*"
-
-[package.source]
-type = "git"
-url = "https://github.com/tiulpin/notion-py.git"
-reference = "master"
-resolved_reference = "bddc1c6731e1c1eaea9e99fbed6af510cb585b0d"
 
 [[package]]
 name = "numpy"
@@ -377,7 +370,7 @@ testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "requests", "xm
 name = "python-dotenv"
 version = "0.15.0"
 description = "Add .env support to your django/flask apps in development and deployments"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 
@@ -661,7 +654,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "d4f04690a192a8082b91a53723231b35867b088cd07496e0582560354e02e7f2"
+content-hash = "af527b5e9e74c9be31fd9791787f5ad89a7781b411e179d7558fc9776a23ea93"
 
 [metadata.files]
 appdirs = [
@@ -841,7 +834,10 @@ mypy-extensions = [
     {file = "mypy_extensions-0.4.3-py2.py3-none-any.whl", hash = "sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d"},
     {file = "mypy_extensions-0.4.3.tar.gz", hash = "sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8"},
 ]
-notion = []
+notion = [
+    {file = "notion-0.0.28-py3-none-any.whl", hash = "sha256:cc380ea2ffe70ee8d5f19244df910cc79ea56a577ca569553d30f8798f0b5b61"},
+    {file = "notion-0.0.28.tar.gz", hash = "sha256:a6c511e1055bb69f05d75220f3f6a5de377a52d42ae38186c3138557c6b4942a"},
+]
 numpy = [
     {file = "numpy-1.20.0-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:89bd70c9ad540febe6c28451ba225eb4e49d27f64728357f512c808002325dfa"},
     {file = "numpy-1.20.0-cp37-cp37m-manylinux1_i686.whl", hash = "sha256:1264c66129f5ef63187649dd43f1ca59532e8c098723643336a85131c0dcce3f"},
