@@ -1,5 +1,6 @@
 from typing import Dict, FrozenSet, List, Optional, Set, Tuple, Type, Union
 
+import string
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -60,7 +61,7 @@ def extract_names(
     doc = nlp(f"{tweet.get('full_text', '')}")
     names = [X.text for X in doc.ents if X.label_ == "PER"]
 
-    if names:
+    if names and len(names[0].split()) > 1:
         name = names[0]
     else:
         doc = nlp(description)
@@ -72,7 +73,11 @@ def extract_names(
         if u := e.get("user_mentions"):
             username = u[0].get("screen_name")
     elif "@" in description:
-        username = [h for h in description.split() if h.startswith("@")][0]
+        username = [
+            h
+            for h in description.replace("(", " ").replace(")", " ").split()
+            if h.startswith("@")
+        ][0]
 
     return username, name
 
