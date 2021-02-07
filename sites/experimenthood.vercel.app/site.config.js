@@ -1,6 +1,6 @@
 module.exports = {
   // where it all starts -- the site's root Notion page (required)
-  rootNotionPageId: '9b2a9b0a3aee4333af428fec8c9e3620',
+  rootNotionPageId: '11ffd65d6e53498ea174f6343857f643',
 
   // basic site info (required)
   name: 'Data Scientist',

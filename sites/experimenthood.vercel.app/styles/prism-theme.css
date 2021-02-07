@@ -4,7 +4,7 @@
   background-color: rgba(249, 250, 251, 1);
   border: 1px solid rgba(229, 231, 235, 1);
   border-radius: 0.375rem;
-  padding: 1.5em;
+  padding: 1.5em !important;
 }
 
 .dark-mode .notion-code {
@@ -13,10 +13,10 @@
 }
 .notion code {
   color: rgba(31, 41, 55, 1);
-  border: 0 none;
-  box-shadow: none;
-  background: none;
-  padding: 0;
+  border: 0 none !important;
+  box-shadow: none !important;
+  background: none !important;
+  padding: 0 !important;
 }
 .dark-mode .notion code {
   color: rgba(229, 231, 235, 1);
@@ -98,4 +98,10 @@ pre {
 .token.url,
 .token.variable {
   background: none;
+}
+
+pre[class*='language-'] > code {
+  border-left: 0 none !important;
+  box-shadow: none !important;
+  background: none !important;
 }

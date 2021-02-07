@@ -21,16 +21,54 @@ export const Footer: React.FC<{
 
   return (
     <footer className={styles.footer}>
-      <div className={styles.copyright}><a href="https://github.com/underhood-club">GitHub</a></div>
+      <div className={styles.copyright}>Copyright 2021 {config.author}</div>
+
+      <div className={styles.settings}>
+        <a
+          className={styles.toggleDarkMode}
+          onClick={toggleDarkModeCb}
+          title='Tottle dark mode'
+        >
+          {isDarkMode ? <IoMoonSharp /> : <IoSunnyOutline />}
+        </a>
+      </div>
 
       <div className={styles.social}>
-        <a
-                  className={styles.toggleDarkMode}
-                  onClick={toggleDarkModeCb}
-                  title='Tottle dark mode'
-                >
-                  {isDarkMode ? <IoMoonSharp /> : <IoSunnyOutline />}
-                </a>
+        {config.twitter && (
+          <a
+            className={styles.twitter}
+            href={`https://twitter.com/${config.twitter}`}
+            title={`Twitter @${config.twitter}`}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            <FaTwitter />
+          </a>
+        )}
+
+        {config.github && (
+          <a
+            className={styles.github}
+            href={`https://github.com/${config.github}`}
+            title={`GitHub @${config.github}`}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            <FaGithub />
+          </a>
+        )}
+
+        {config.linkedin && (
+          <a
+            className={styles.linkedin}
+            href={`https://www.linkedin.com/in/${config.linkedin}`}
+            title={`LinkedIn ${config.author}`}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            <FaLinkedin />
+          </a>
+        )}
       </div>
     </footer>
   )
