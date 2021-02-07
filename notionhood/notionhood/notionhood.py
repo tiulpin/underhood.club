@@ -49,7 +49,8 @@ def extract_names(
     description: str, tweet: dict
 ) -> Tuple[Optional[str], Optional[str]]:
     """
-    Returns the first name in the given text (first tweet + description) using spacy named entity recognition and twitter username (from API field)
+    Returns the first name in the given text (first tweet + description) using spacy named entity recognition and
+    twitter username (from API field)
 
     :param description: string from profile description
     :param tweet: dumped tweet to extract data from
@@ -241,6 +242,7 @@ class Notionhood:
                 ),
             )
 
+        @notion_handler
         def check_day(weekday: int):
             if weekday != self.current_day:
                 self.current_day = tweet.date.weekday()
@@ -249,6 +251,7 @@ class Notionhood:
                 )
                 self.add(DividerBlock)
 
+        @notion_handler
         def add_tweet(tw: Notionhood.Tweet) -> None:
             self.add(
                 TextBlock,
@@ -265,6 +268,7 @@ class Notionhood:
                 self.add(ImageBlock).set_source_url(i)
             self.add(DividerBlock)
 
+        @notion_handler
         def add_links() -> None:
             self.add(HeaderBlock, content=self.local.links_title)
             for k in self.links:
