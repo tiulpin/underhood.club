@@ -58,7 +58,7 @@
     "postcss-import": "^7.1.3",
     "postcss-initial": "^1.5.3",
     "ramda": "^0.18.0",
-    "rimraf": "^2.6.2",
+    "rimraf": "^3.0.2",
     "tablesort": "^3.0.2",
     "through2": "^2.0.3",
     "trim-html-tag": "^1.0.5",
