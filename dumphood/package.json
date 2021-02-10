@@ -29,7 +29,7 @@
     "babel": "^5.8.29",
     "babel-loader": "^5.3.3",
     "bignum-dec": "^1.0.1",
-    "buildbranch": "0.0.3",
+    "buildbranch": "2.0.1",
     "commonmark-helpers": "^0.4.1",
     "each-done": "^1.0.0",
     "exports-loader": "^0.6.4",
