@@ -48,4 +48,5 @@ That's why I've created three main containers, that help make a website like �
 - to all authors at [@mobileunderhood](https://twitter.com/mobileunderhood), [@produnderhood](https://twitter.com/produnderhood), [@itunderhood](https://twitter.com/iunderhood), [@dsunderhood](https://twitter.com/dsunderhood) for the great content, without it the website would not be that good
 - [`notion-py`](http://github.com/jamalex/notion-py/) – the project could not exist without this particular library
 - [`anyunderhood`](https://github.com/anyunderhood/anyunderhood) – the template is the base of `dumphood` image for tweets downloading
+- [`nextjs-notion-starter-kit`](https://github.com/transitive-bullshit/nextjs-notion-starter-kit) – the template is the base for *.underhood.club and thanks to it, NextJS and Vercel the user experience is fast and smooth
 - [`python-package-template`](https://github.com/TezRomacH/python-package-template) – got some GitHub configs/dependencies from there
