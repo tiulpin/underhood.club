@@ -9,7 +9,7 @@ python = "^3.8"
 requests = "^2.25.1"
 imgurpython = "^1.1.7"
 ujson = "^4.0.2"
-spacy = "^3.0.1"
+spacy = "^3.0.3"
 notion = "^0.0.28"
 
 [tool.poetry.dev-dependencies]
