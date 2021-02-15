@@ -91,9 +91,9 @@ smart-open = ">=1.8.1"
 
 [package.extras]
 distributed = ["Pyro4 (>=4.27)"]
-docs = ["pytest", "pytest-rerunfailures", "mock", "cython", "nmslib", "pyemd", "testfixtures", "Morfessor (==2.0.2a4)", "python-Levenshtein (>=0.10.2)", "visdom (>=0.1.8,!=0.1.8.7)", "scikit-learn", "Pyro4 (>=4.27)", "sphinx (<=2.4.4)", "sphinx-gallery", "sphinxcontrib.programoutput", "sphinxcontrib-napoleon", "matplotlib", "plotly", "memory-profiler", "annoy", "pyro4", "nltk", "statsmodels", "pandas"]
-test = ["pytest", "pytest-rerunfailures", "mock", "cython", "nmslib", "pyemd", "testfixtures", "Morfessor (==2.0.2a4)", "python-Levenshtein (>=0.10.2)", "visdom (>=0.1.8,!=0.1.8.7)", "scikit-learn"]
-test-win = ["pytest", "pytest-rerunfailures", "mock", "cython", "nmslib", "pyemd", "testfixtures", "Morfessor (==2.0.2a4)", "python-Levenshtein (>=0.10.2)", "visdom (>=0.1.8,!=0.1.8.7)", "scikit-learn"]
+docs = ["pytest", "pytest-rerunfailures", "mock", "cython", "nmslib", "pyemd", "testfixtures", "Morfessor (==2.0.2a4)", "python-Levenshtein (>=0.10.2)", "visdom (>0.1.8.7)", "scikit-learn", "Pyro4 (>=4.27)", "sphinx (<=2.4.4)", "sphinx-gallery", "sphinxcontrib.programoutput", "sphinxcontrib-napoleon", "matplotlib", "plotly", "memory-profiler", "annoy", "pyro4", "nltk", "statsmodels", "pandas"]
+test = ["pytest", "pytest-rerunfailures", "mock", "cython", "nmslib", "pyemd", "testfixtures", "Morfessor (==2.0.2a4)", "python-Levenshtein (>=0.10.2)", "visdom (>0.1.8.7)", "scikit-learn"]
+test-win = ["pytest", "pytest-rerunfailures", "mock", "cython", "nmslib", "pyemd", "testfixtures", "Morfessor (==2.0.2a4)", "python-Levenshtein (>=0.10.2)", "visdom (>0.1.8.7)", "scikit-learn"]
 
 [[package]]
 name = "iniconfig"
@@ -245,7 +245,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "smart-open"
-version = "4.1.2"
+version = "4.2.0"
 description = "Utils for streaming large files (S3, HDFS, GCS, Azure Blob Storage, gzip, bz2...)"
 category = "main"
 optional = false
@@ -257,7 +257,7 @@ azure = ["azure-storage-blob", "azure-common", "azure-core"]
 gcp = ["google-cloud-storage"]
 http = ["requests"]
 s3 = ["boto3"]
-test = ["boto3", "google-cloud-storage", "azure-storage-blob", "azure-common", "azure-core", "requests", "mock", "moto[server] (==1.3.14)", "pathlib2", "responses", "paramiko", "parameterizedtestcase", "pytest", "pytest-rerunfailures"]
+test = ["boto3", "google-cloud-storage", "azure-storage-blob", "azure-common", "azure-core", "requests", "mock", "moto[server] (==1.3.14)", "pathlib2", "responses", "boto3", "paramiko", "parameterizedtestcase", "pytest", "pytest-rerunfailures"]
 webhdfs = ["requests"]
 
 [[package]]
@@ -531,8 +531,7 @@ six = [
     {file = "six-1.15.0.tar.gz", hash = "sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"},
 ]
 smart-open = [
-    {file = "smart_open-4.1.2-py3-none-any.whl", hash = "sha256:027782b70c9b08f758a520b335aa98134ea714c4fb860b5842e604004e0c5a20"},
-    {file = "smart_open-4.1.2.tar.gz", hash = "sha256:4bbb6233364fc1173cc0af6b7a56ed76fce32509514f1978a995a5835f3177f1"},
+    {file = "smart_open-4.2.0.tar.gz", hash = "sha256:d9f5a0f173ccb9bbae528db5a3804f57145815774f77ef755b9b0f3b4b2a9dcb"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
