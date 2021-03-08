@@ -27,7 +27,7 @@ mypy = "^0.800"
 bandit = "^1.7.0"
 safety = "^1.10.3"
 pytest = "^6.2.1"
-pylint = "^2.6.0"
+pylint = "^2.7.2"
 pydocstyle = "^5.1.1"
 pre-commit = "^2.10.1"
 
