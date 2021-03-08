@@ -43,7 +43,7 @@
     "gulp-debug": "^2.1.2",
     "gulp-jade": "^1.1.0",
     "gulp-jimp": "^1.2.9",
-    "gulp-postcss": "^6.4.0",
+    "gulp-postcss": "^8.0.0",
     "gulp-rename": "^2.0.0",
     "gulp-util": "^3.0.8",
     "hasha": "^2.0.2",
