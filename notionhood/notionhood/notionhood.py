@@ -1,13 +1,9 @@
-from typing import Dict, FrozenSet, List, Optional, Set, Tuple, Type, Union
-
-import string
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
 from time import sleep
+from typing import Dict, List, Optional, Tuple, Type, Union
 
-import requests
-import ru_core_news_sm
 from imgurpython import ImgurClient
 from notion.block import (
     BasicBlock,
@@ -22,15 +18,17 @@ from notion.block import (
     TextBlock,
 )
 from notion.collection import NotionDate
+from orjson import loads
+import requests
+import ru_core_news_sm
 from tqdm import tqdm
-from ujson import loads
 
 
 @dataclass
 class LocalConfig:  # 🇷🇺
     week_title: str = "Архив недели"
     links_title: str = "Ссылки"
-    days: FrozenSet[str] = (
+    days: Tuple[str, ...] = (
         "Понедельник",
         "Вторник",
         "Среда",
@@ -43,19 +41,29 @@ class LocalConfig:  # 🇷🇺
 
 
 def md_link(display: str, url: str) -> str:
+    """Makes Markdown link from the given URL
+
+    Args:
+        display: text to display the link
+        url: the link to embed
+
+    Returns:
+        Markdown-formatted link
+    """
     return f"[{display}]({url})"
 
 
-def extract_names(
-    description: str, tweet: dict
-) -> Tuple[Optional[str], Optional[str]]:
-    """
-    Returns the first name in the given text (first tweet + description) using spacy named entity recognition and
+def extract_names(description: str, tweet: dict) -> Tuple[Optional[str], Optional[str]]:
+    """Returns the first name in the given text (first tweet + description) using spacy named entity recognition and
     twitter username (from API field)
 
-    :param description: string from profile description
-    :param tweet: dumped tweet to extract data from
-    :return: username and person name string if found
+    Args:
+        description: string from profile description
+        tweet: dumped tweet to extract data from
+        username and person name string if found
+
+    Returns:
+        name and username, if found
     """
     nlp = ru_core_news_sm.load()
     doc = nlp(f"{tweet.get('full_text', '')}")
@@ -82,16 +90,28 @@ def extract_names(
     return username, name
 
 
-def get_date(twitter_date: str) -> datetime.date:
-    """
-    Creates datetime object from dumped tweet date string.
-    :param twitter_date: date from tweet
-    :return: datetime object
+def get_date(twitter_date: str) -> datetime:
+    """Creates datetime object from dumped tweet date string.
+
+    Args:
+        twitter_date: date from tweet
+        datetime object
+
+    Returns:
+        datetime object
     """
     return datetime.strptime(twitter_date, "%a %b %d %H:%M:%S +0000 %Y")
 
 
 def notion_handler(func):
+    """Pretty stupid decorator for handling any sudden exception from Notion, but hey, it works
+
+    Args:
+        func: function to decorate
+
+    Returns:
+        decorated with that velosiped function
+    """
     def inner_function(*args, **kwargs):
         while True:
             try:
@@ -107,14 +127,12 @@ def notion_handler(func):
 @dataclass
 class Notionhood:
     page: CollectionViewBlock
-    links: Set[str]
+    links: List[str]
     local: LocalConfig
     underhood: str
-    cloudflare_id: str
-    cloudflare_token: str
     imgur_client: ImgurClient
     current_day: Optional[int] = None
-    image_formats: Tuple[str] = (".png", ".jpg", ".jpeg")
+    image_formats: Tuple[str, ...] = (".png", ".jpg", ".jpeg")
 
     class TocBlock(BasicBlock):
         _type = "table_of_contents"
@@ -146,7 +164,6 @@ class Notionhood:
 
     def upload_img(self, image: str) -> str:
         response = self.imgur_client.upload_from_path(image, anon=True)
-
         return response["link"]
 
     @notion_handler
@@ -161,6 +178,8 @@ class Notionhood:
         return b
 
     def process_tweet(self, t: Dict) -> Optional[Tweet]:
+        tweet = None
+
         if not t["full_text"].startswith(("@", "RT @")):
             tweet = Notionhood.Tweet(
                 id=t["id_str"],
@@ -169,9 +188,7 @@ class Notionhood:
                 if t["is_quote_status"] and "quoted_status" in t
                 else None,
                 date=get_date(t["created_at"]) + self.local.td,
-                mentions=[
-                    u["screen_name"] for u in t["entities"]["user_mentions"]
-                ],
+                mentions=[u["screen_name"] for u in t["entities"]["user_mentions"]],
                 hashtags=t["entities"]["hashtags"],
                 urls=[
                     Notionhood.Tweet.TweetURL(
@@ -207,10 +224,9 @@ class Notionhood:
                 )
                 if u.source_url.endswith(self.image_formats):
                     tweet.images.append(u.source_url)
-                elif not (
-                    "twitter.com" in u.source_url and "status" in u.source_url
-                ):
-                    self.links.add(u.source_url)
+                elif not ("twitter.com" in u.source_url and "status" in u.source_url):
+                    if u.source_url not in self.links:
+                        self.links.append(u.source_url)
             for n in tweet.mentions:
                 tweet.text = tweet.text.replace(
                     f"@{n}", md_link(f"@{n}", f"https://twitter.com/{n}")
@@ -224,14 +240,12 @@ class Notionhood:
                 tweet.quote = tweet.quote.replace(
                     u.shorten_url, md_link(u.display_url, u.source_url)
                 )
-            return tweet
+
+        return tweet
 
     def write_page(self, author_dir: Path) -> None:
         def get_valid_avatar_path():
-            avatar_path = str(
-                author_dir / "images" / f"{author_dir.name}-image"
-            )
-
+            avatar_path = str(author_dir / "images" / f"{author_dir.name}-image")
             return avatar_path + (
                 ".jpg" if Path(avatar_path + ".jpg").exists() else ".png"
             )
@@ -248,30 +262,29 @@ class Notionhood:
             )
 
         @notion_handler
-        def check_day(weekday: int):
-            if weekday != self.current_day:
+        def check_day(weekday: int) -> None:
+            if weekday != self.current_day and tweet is not None:
                 self.current_day = tweet.date.weekday()
-                self.add(
-                    SubheaderBlock, content=self.local.days[self.current_day]
-                )
+                self.add(SubheaderBlock, content=self.local.days[self.current_day])
                 self.add(DividerBlock)
 
         @notion_handler
         def add_tweet(tw: Notionhood.Tweet) -> None:
-            self.add(
-                TextBlock,
-                content=md_link(
-                    tweet.date.strftime("%H:%M"),
-                    f"https://twitter.com/{self.underhood}/status/{tw.id}",
-                ),
-            ).set("format.block_color", "gray")
-            if tw.quote:
-                self.add(QuoteBlock, content=tw.quote)
-            if len(tw.text):
-                self.add(TextBlock, content=tw.text)
-            for i in tw.images:
-                self.add(ImageBlock).set_source_url(i)
-            self.add(DividerBlock)
+            if tw:
+                self.add(
+                    TextBlock,
+                    content=md_link(
+                        tw.date.strftime("%H:%M"),
+                        f"https://twitter.com/{self.underhood}/status/{tw.id}",
+                    ),
+                ).set("format.block_color", "gray")
+                if tw.quote:
+                    self.add(QuoteBlock, content=tw.quote)
+                if len(tw.text):
+                    self.add(TextBlock, content=tw.text)
+                for i in tw.images:
+                    self.add(ImageBlock).set_source_url(i)
+                self.add(DividerBlock)
 
         @notion_handler
         def add_links() -> None:
@@ -291,12 +304,12 @@ class Notionhood:
                 cf_url, headers=cf_headers, data="\n".join(lines).encode("utf8")
             )
 
-        tweets = loads(
-            (author_dir / f"{author_dir.name}-tweets.json").read_text()
-        )["tweets"]
-        description = loads(
-            (author_dir / f"{author_dir.name}-info.json").read_text()
-        )["description"]
+        tweets = loads((author_dir / f"{author_dir.name}-tweets.json").read_text())[
+            "tweets"
+        ]
+        description = loads((author_dir / f"{author_dir.name}-info.json").read_text())[
+            "description"
+        ]
         username, name = extract_names(description, tweets[0])
         set_page_info(self.upload_img(get_valid_avatar_path()))
         self.add(Notionhood.TocBlock).set("format.block_color", "gray")

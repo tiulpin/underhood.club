@@ -1,6 +1,7 @@
 #!/usr/bin/python
 """
-notionhood – utility with strange classes and methods to upload underhood data to Notion
+notionhood – utility with strange classes and methods to upload underhood.club data to Notion
+Waiting for an official Notion API library, then it will be refactored and become a library
 """
 import sys
 from os import environ
@@ -23,9 +24,7 @@ def main():
         underhood=underhood,
         page=archive.collection.add_row(),
         local=LocalConfig(),
-        links=set(),
-        cloudflare_id=environ["CLOUDFLARE_ID"],
-        cloudflare_token=environ["CLOUDFLARE_TOKEN"],
+        links=list(),
         imgur_client=ImgurClient(
             environ.get("IMGUR_API_ID"), environ.get("IMGUR_API_SECRET")
         ),

@@ -8,14 +8,15 @@ authors = ["tiulpin <viktor@tiulp.in>"]
 python = "^3.8"
 requests = "^2.25.1"
 imgurpython = "^1.1.7"
-ujson = "^4.0.2"
 spacy = "^3.0.3"
-notion = {git = "https://github.com/julrach/notion-py"}
+notion = {git = "https://github.com/tiulpin/notion-py"}
+orjson = "^3.5.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
 black = "^20.8b1"
 python-dotenv = "^0.15.0"
+mypy = "^0.812"
 
 [tool.poetry.scripts]
 notionhood = "notionhood.__main__:main"
