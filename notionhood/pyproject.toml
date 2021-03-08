@@ -10,7 +10,7 @@ requests = "^2.25.1"
 imgurpython = "^1.1.7"
 ujson = "^4.0.2"
 spacy = "^3.0.3"
-notion = "^0.0.28"
+notion = {git = "https://github.com/julrach/notion-py"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
