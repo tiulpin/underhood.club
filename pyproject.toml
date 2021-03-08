@@ -19,7 +19,7 @@ homepage = "https://github.com/tiulpin/underhood.club"
 python = "^3.7"
 
 [tool.poetry.dev-dependencies]
-darglint = "^1.5.8"
+darglint = "^1.7.0"
 isort = "^5.7.0"
 pyupgrade = "^2.10.0"
 black = "^20.8b1"
