@@ -8,7 +8,7 @@ authors = ["tiulpin <viktor@tiulp.in>"]
 python = "^3.8"
 requests = "^2.25.1"
 imgurpython = "^1.1.7"
-spacy = "^3.0.3"
+spacy = "^3.0.5"
 notion = {git = "https://github.com/tiulpin/notion-py"}
 orjson = "^3.5.1"
 
