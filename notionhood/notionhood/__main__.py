@@ -24,7 +24,7 @@ def main():
         underhood=underhood,
         page=archive.collection.add_row(),
         local=LocalConfig(),
-        links=list(),
+        links=[],
         imgur_client=ImgurClient(
             environ.get("IMGUR_API_ID"), environ.get("IMGUR_API_SECRET")
         ),
