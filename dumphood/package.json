@@ -32,7 +32,7 @@
     "buildbranch": "0.0.3",
     "commonmark-helpers": "^0.4.1",
     "each-done": "^1.0.0",
-    "exports-loader": "^0.6.4",
+    "exports-loader": "^0.7.0",
     "express": "^4.16.2",
     "file-type": "^3.1.0",
     "fs-extra": "^0.26.0",
