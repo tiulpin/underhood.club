@@ -57,7 +57,7 @@
     "numd": "^2.1.0",
     "postcss-import": "^12.0.1",
     "postcss-initial": "^1.5.3",
-    "ramda": "^0.18.0",
+    "ramda": "^0.27.1",
     "rimraf": "^3.0.2",
     "tablesort": "^3.0.2",
     "through2": "^4.0.2",
