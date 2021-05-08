@@ -1,4 +1,4 @@
-"""TwitterAuthor declaration module. Everything related to Twitter API happens right here."""
+"""Everything related to Twitter API happens right here."""
 from collections import defaultdict
 from dataclasses import dataclass, InitVar
 from functools import cached_property
