@@ -10,13 +10,14 @@ ENV PYTHONUNBUFFERED=1 \
     VENV_PATH="/app/.venv"
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
-        curl \
-        build-essential \
-        gcc \
-        git \
-        g++
+        curl=7.64.0-4+deb10u2 \
+        build-essential=12.6 \
+        gcc=4:8.3.0-1 \
+        git=1:2.20.1-2+deb10u3 \
+        g++=4:8.3.0-1
 ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 ENV POETRY_VERSION=1.1.6
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
 
 WORKDIR /app
@@ -32,7 +33,7 @@ FROM python:3.9-slim-buster as production
 ENV PATH="$PATH:/app/.venv/bin"
 COPY --from=app /app /app
 RUN apt-get update \
-    && apt-get install --no-install-recommends -y git \
+    && apt-get install --no-install-recommends -y git=1:2.20.1-2+deb10u3 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN git config --global user.email "hey@underhood.club" && git config --global user.name "underhood"

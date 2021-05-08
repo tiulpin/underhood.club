@@ -45,7 +45,7 @@ def main(
         until_id=tweet_id_from_url(until_tweet),
     )
     new_author_url = underhood_page.write(author)
-    urls[f"/{new_author_url}"] = underhood_page.page.id.replace("-", "")
+    urls[f"/{new_author_url}"] = underhood_page.npage.id.replace("-", "")
     urls_path.write_text(dumps(urls, indent=4))
 
 

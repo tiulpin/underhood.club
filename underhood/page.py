@@ -31,7 +31,7 @@ from underhood.utils import md_link, NotionTableOfContents, print_topics
 class Page:
     """Underhood page as it is."""
 
-    page: CollectionViewBlock
+    npage: CollectionViewBlock
     underhood: str
     threads: list[Union[CollectionViewBlock, EmbedBlock, BookmarkBlock]] = field(default_factory=list)
     links: list[str] = field(default_factory=list)
@@ -42,7 +42,7 @@ class Page:
         self, o: Type, content: Optional[str] = None, page=None
     ) -> Union[CollectionViewBlock, EmbedBlock, BookmarkBlock]:
         if page is None:
-            page = self.page
+            page = self.npage
         b = page.children.add_new(o, title=content) if content else page.children.add_new(o)
         return b
 
@@ -50,9 +50,9 @@ class Page:
         @retry(wait=wait_random(min=3, max=7))
         def set_page_info(page=None):
             if page is None:
-                self.page.set("format.page_icon", author.avatar)
-                self.page.title = name if name else "_"
-                self.page.nedelia = NotionDate(
+                self.npage.set("format.page_icon", author.avatar)
+                self.npage.title = name if name else "_"
+                self.npage.nedelia = NotionDate(
                     start=author.first_tweet.date.date(),
                     end=author.last_tweet.date.date(),
                 )
@@ -62,8 +62,8 @@ class Page:
 
         @retry(wait=wait_random(min=3, max=7))
         def check_day(weekday: int) -> None:
-            if weekday != self.current_day and t is not None:
-                self.current_day = t.date.weekday()
+            if weekday != self.current_day:
+                self.current_day = weekday
                 self.add(SubheaderBlock, content=LOCALE.days[self.current_day])
                 self.add(DividerBlock)
 
@@ -87,7 +87,7 @@ class Page:
                 for i in tt.media:
                     self.add(ImageBlock, page=thread_page).set_source_url(i)
                 self.add(DividerBlock, page=thread_page)
-            thread_page.children.add_alias(self.page)
+            thread_page.children.add_alias(self.npage)
             self.threads.append(thread_page)
 
         @retry(wait=wait_random(min=3, max=7))
@@ -134,7 +134,7 @@ class Page:
         add_links()
         print_topics([t.text for c in author.timeline.keys() for t in author.timeline[c]])
 
-        return username if username else self.page.id[:7]
+        return username if username else self.npage.id[:7]
 
 
 def extract_names(author: Author) -> tuple[Optional[str], Optional[str]]:

@@ -53,9 +53,8 @@ class UnderhoodTweet:
             )
             if u.source_url.endswith(IMAGE_FORMATS):
                 self.media.append(u.source_url)
-            elif not ("twitter.com" in u.source_url and "status" in u.source_url):
-                if u.source_url not in self.links:
-                    self.links.append(u.source_url)
+            elif not ("twitter.com" in u.source_url and "status" in u.source_url and u.source_url not in self.links):
+                self.links.append(u.source_url)
         for n in self.mentions:
             self.text = self.text.replace(f"@{n}", md_link(f"@{n}", f"https://twitter.com/{n}"))
         for u in self.quote_urls:
