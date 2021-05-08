@@ -1,0 +1,9 @@
+Dockerfile
+.idea
+tests
+.venv
+.deepsource.toml
+.editorconfig
+.gitignore
+.git
+*__pycache__*

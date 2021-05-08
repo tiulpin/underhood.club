@@ -2,7 +2,7 @@ version = 1
 
 test_patterns = ["*/tests/*, */test/*"]
 
-exclude_patterns = ["docs/*,"]
+exclude_patterns = ["docs/*, underhood/utils.py"]
 
 [[analyzers]]
 name = "python"
@@ -16,14 +16,7 @@ name = "docker"
 enabled = true
 
   [analyzers.meta]
-  dockerfile_paths = ["dumphood/Dockerfile, topichood/Dockerfile, notionhood/Dockerfile"]
-
-[[analyzers]]
-name = "javascript"
-enabled = true
-
-  [analyzers.meta]
-  environment = ["nodejs"]
+  dockerfile_paths = ["Dockerfile"]
 
 [[analyzers]]
 name = "shell"
