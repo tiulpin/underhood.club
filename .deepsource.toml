@@ -19,13 +19,6 @@ enabled = true
   dockerfile_paths = ["dumphood/Dockerfile, topichood/Dockerfile, notionhood/Dockerfile"]
 
 [[analyzers]]
-name = "javascript"
-enabled = true
-
-  [analyzers.meta]
-  environment = ["nodejs"]
-
-[[analyzers]]
 name = "shell"
 enabled = true
 
