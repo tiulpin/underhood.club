@@ -4,20 +4,13 @@
 
 The monorepo contains everything what's needed.
 
-### All stacks badges
+[![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-380/)
 [![DeepSource](https://deepsource.io/gh/tiulpin/underhood.club.svg/?label=active+issues&token=O2vpl_Y605V0lrWbaTTOTNTh)](https://deepsource.io/gh/tiulpin/underhood.club/?ref=repository-badge)
 [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/tiulpin/overhood/blob/master/.pre-commit-config.yaml)
 [![License](https://img.shields.io/github/license/tiulpin/underhood.club)](https://github.com/tiulpin/underhood.club/blob/main/LICENSE)
 [![Dependencies Status](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)](https://github.com/tiulpin/overhood/pulls?utf8=%E2%9C%93&q=is%3Apr%20author%3Aapp%2Fdependabot)
-
-## Python badges
-
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Security: bandit](https://img.shields.io/badge/security-bandit-green.svg)](https://github.com/PyCQA/bandit)
-
-## Node.js badges
-
-No badges!
 
 </div>
 
@@ -27,13 +20,10 @@ I wanted a way of storing tweets per weeks, like [@abroadunderhood](http://abroa
 - don't want to host anything at all/spend resources for hostings
 - need a good way of editing existing pages
 - want it to look nice
-- am not a frontend-developer, know nothing about JavaScript and so on
+- am not a frontend-developer, know nothing about JavaScript
 - can dockerize things and make them work
 
-That's why I've created three main containers, that help make a website like 🔥[underhood.club](https://underhood.club/)
-- [`dumphood`](https://github.com/tiulpin/underhood.club/main/dumphood) – downloading tweets using Twitter API
-- [`topichood`](https://github.com/tiulpin/underhood.club/main/topichood) – topic modeling on tweets
-- [`notionhood`](https://github.com/tiulpin/underhood.club/main/notionhood) – uploading already dumped tweets to Notion with a bit of NLP (NER for finding pages names)
+That's why I've created one Python container, that includes three main packages/scripts, that help make a website like 🔥[underhood.club](https://underhood.club/) with a bit of NLP (NER for finding pages names)
 
 ### Articles
 
@@ -46,7 +36,6 @@ That's why I've created three main containers, that help make a website like �
 
 ## 🙏 Thanks
 - to all authors at [@mobileunderhood](https://twitter.com/mobileunderhood), [@produnderhood](https://twitter.com/produnderhood), [@itunderhood](https://twitter.com/iunderhood), [@dsunderhood](https://twitter.com/dsunderhood) for the great content, without it the website would not be that good
-- [`notion-py`](http://github.com/jamalex/notion-py/) – the project could not exist without this particular library
-- [`anyunderhood`](https://github.com/anyunderhood/anyunderhood) – the template is the base of `dumphood` image for tweets downloading
+- [`notion-py`](http://github.com/jamalex/notion-py/) – the project could not exist without this library
 - [`nextjs-notion-starter-kit`](https://github.com/transitive-bullshit/nextjs-notion-starter-kit) – the template is the base for *.underhood.club and thanks to it, NextJS and Vercel the user experience is fast and smooth
 - [`python-package-template`](https://github.com/TezRomacH/python-package-template) – got some GitHub configs/dependencies from there
