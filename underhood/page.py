@@ -82,7 +82,7 @@ class Page:
                 ).set("format.block_color", "gray")
                 if tt.quote:
                     self.add(QuoteBlock, content=tt.quote, page=thread_page)
-                if len(tt.text):
+                if tt.text:
                     self.add(TextBlock, content=tt.text, page=thread_page)
                 for i in tt.media:
                     self.add(ImageBlock, page=thread_page).set_source_url(i)
@@ -102,7 +102,7 @@ class Page:
                 ).set("format.block_color", "gray")
                 if tw.quote:
                     self.add(QuoteBlock, content=tw.quote)
-                if len(tw.text):
+                if tw.text:
                     self.add(TextBlock, content=tw.text)
                 for i in tw.media:
                     self.add(ImageBlock).set_source_url(i)
