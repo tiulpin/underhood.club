@@ -7,31 +7,7 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "daily"
-    allow:
-      - dependency-type: "all"
-    commit-message:
-      prefix: "🐍⬆️"
-  - package-ecosystem: "npm"
-    directory: "/dumphood/"
-    schedule:
-      interval: "daily"
-    allow:
-      - dependency-type: "all"
-    commit-message:
-      prefix: "👀⬆️"
-  - package-ecosystem: "pip"
-    directory: "/topichood/"
-    schedule:
-      interval: "daily"
-    allow:
-      - dependency-type: "all"
-    commit-message:
-      prefix: "🐍⬆️"
-  - package-ecosystem: "pip"
-    directory: "/notionhood/"
-    schedule:
-      interval: "daily"
+      interval: "weekly"
     allow:
       - dependency-type: "all"
     commit-message:
@@ -39,7 +15,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     allow:
       - dependency-type: "all"
     commit-message:
