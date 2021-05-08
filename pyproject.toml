@@ -37,7 +37,7 @@ notion = {git = "https://github.com/tiulpin/notion-py"}
 docker = "docker build -t ghcr.io/tiulpin/underhood:latest -f Dockerfile ."
 
 [tool.poetry.dev-dependencies]
-python-dotenv = "^0.15.0"
+python-dotenv = "^0.17.1"
 darglint = "^1.5.8"
 isort = "^5.7.0"
 pyupgrade = "^2.10.0"
