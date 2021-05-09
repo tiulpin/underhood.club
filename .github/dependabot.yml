@@ -11,7 +11,7 @@ updates:
     allow:
       - dependency-type: "all"
     commit-message:
-      prefix: "🐍⬆️"
+      prefix: "🐍"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -19,4 +19,4 @@ updates:
     allow:
       - dependency-type: "all"
     commit-message:
-      prefix: "😼⬆️"
+      prefix: "😼"

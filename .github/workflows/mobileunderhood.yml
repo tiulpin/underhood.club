@@ -1,8 +1,8 @@
-name: '📱 mobileunderhood weekly'
+name: 'weekly 📱 mobileunderhood'
 
 on:
   schedule:
-    - cron: '0 6 * * MON'
+    - cron: '0 0 * * MON'
   workflow_dispatch:
     inputs:
       first_tweet:

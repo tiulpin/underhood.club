@@ -140,6 +140,6 @@ class Page:
             self.author.username = self.npage.id.replace("-", "")
         for n, th in enumerate(self.threads):
             self.urls[f"/{self.author.username}-thread-{n + 1}"] = th.id.replace("-", "")
-        self.urls[f"/{self.author.username}"] = self.author.username
+        self.urls[f"/{self.author.username}"] = self.npage.id.replace("-", "")
 
         print_topics([t.text for c in self.author.timeline.keys() for t in self.author.timeline[c]])

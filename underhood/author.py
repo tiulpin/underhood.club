@@ -60,7 +60,7 @@ class Author:
                 )
             )
         ):
-            for t in response.data:
+            for t in response.data or []:
                 if t.attachments and t.attachments.get("media_keys"):
                     t.attachments["media"] = [  # v2 api me no like it
                         m.get("url") or m.get("preview_image_url")
@@ -129,7 +129,7 @@ def extract_username(author: Author) -> str:
     if "@" in description:
         username = [h[1:] for h in description.replace("(", " ").replace(")", " ").split() if h.startswith("@")][0]
     elif e := tweet.mentions:
-        username = e[0].get("username")
+        username = e[0]
     return username or ""
 
 
@@ -142,11 +142,16 @@ def extract_name(author: Author) -> str:
     Returns:
         name if found else an empty string
     """
+
+    def search_name(d):
+        """Extract first found two-word string (real person name) from Spacy entities analysis."""
+        return [x.text for x in d.ents if x.label_ == "PER" if len(x.text.split()) > 1][0] or ""
+
     description, tweet = author.description, author.first_tweet
     nlp = load(LOCALE.spacy_model)
-    doc = nlp(description)
-    names = [X.text for X in doc.ents if X.label_ == "PER"]
-    if not names:
-        doc = nlp(tweet.text)
-        names = [X.text for X in doc.ents if X.label_ == "PER"]
-    return names[0] if names else ""
+    for text in (description, tweet.text):
+        doc = nlp(text)
+        name = search_name(doc)
+        if name:
+            break
+    return name

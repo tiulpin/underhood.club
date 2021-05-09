@@ -42,7 +42,10 @@ class UnderhoodTweet:
         self.media = [m for m in tweet.attachments.get("media", []) if m] if tweet.attachments else []
         self.quote = quoted.text if quoted else None
         self.quote_urls = (
-            [UnderhoodTweet.TweetURL(u["url"], u["display_url"], u["expanded_url"]) for u in quoted.entities["urls"]]
+            [
+                UnderhoodTweet.TweetURL(u["url"], u["display_url"], u["expanded_url"])
+                for u in quoted.entities.get("urls", [])
+            ]
             if quoted and quoted.entities
             else []
         )

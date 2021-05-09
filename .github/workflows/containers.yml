@@ -1,4 +1,4 @@
-name: "🐳 build underhood container"
+name: "build underhood 🐳 container"
 
 on:
   push:
