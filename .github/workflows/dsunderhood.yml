@@ -1,4 +1,4 @@
-name: '🎲 ds.underhood.club weekly'
+name: '🎲 dsunderhood weekly'
 
 on:
   schedule:
@@ -40,13 +40,13 @@ jobs:
         TWITTER_TOKEN: ${{ secrets.TWITTER_TOKEN }}
         NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-        UNDERHOOD: "dsunderhood"
+        UNDERHOOD: dsunderhood
     steps:
       - name: Pull latest repository
         uses: actions/checkout@v2
         with:
-          repository: tiulpin/${{ env.UNDERHOOD }}
-          path: ./${{ env.UNDERHOOD }}
+          repository: tiulpin/dsunderhood
+          path: ./dsunderhood
           token: ${{ secrets.ACCESS_TOKEN }}
       - run: underhood
       - name: Push latest URLs
@@ -54,5 +54,5 @@ jobs:
         with:
           github_token: ${{ secrets.ACCESS_TOKEN }}
           branch: main
-          directory: ${{ env.UNDERHOOD }}
-          repository: tiulpin/${{ env.UNDERHOOD }}
+          directory: dsunderhood
+          repository: tiulpin/dsunderhood
