@@ -18,12 +18,12 @@
 
 ## Functions
 
+- [`author.Author.__init__`](./author.md#function-__init__)
+- [`author.extract_name`](./author.md#function-extract_name): Get author name from description or the first author tweet by using Spacy NER.
+- [`author.extract_username`](./author.md#function-extract_username): Get username from description or the first author tweet by searching for @.
+- [`page.Page.__init__`](./page.md#function-__init__)
+- [`tweet.UnderhoodTweet.__init__`](./tweet.md#function-__init__)
 - [`utils.clean_tweets`](./utils.md#function-clean_tweets): Prepare (clean) tweet texts for running topic modeling on it.
 - [`utils.md_link`](./utils.md#function-md_link): Make Markdown link from the given URL.
 - [`utils.print_topics`](./utils.md#function-print_topics): Pretty simple topic-modeling with LDA model on tweets: print the results right into stdout.
 - [`utils.tweet_id_from_url`](./utils.md#function-tweet_id_from_url): Obtain tweet id from environment (from URL).
-
-
----
-
-_This file was automatically generated via [lazydocs](https://github.com/ml-tooling/lazydocs)._

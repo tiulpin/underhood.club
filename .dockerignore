@@ -6,4 +6,5 @@ tests
 .editorconfig
 .gitignore
 .git
+.github
 *__pycache__*
