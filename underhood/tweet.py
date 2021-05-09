@@ -13,17 +13,28 @@ class UnderhoodTweet:
 
     @dataclass
     class TweetURL:
-        """Is it really needed? Don't know."""
+        """Twitter URL dataclass."""
 
         shorten_url: str
         display_url: str
         source_url: str
+
+    @dataclass
+    class TweetPoll:
+        """Twitter Poll dataclass."""
+
+        o: InitVar[list[dict]]
+
+        def __post_init__(self, o: list[dict]):
+            total = sum(v.get("votes", 0) for v in o)
+            self.results = [("{:.1%}".format(v.get("votes", 0) / total), v.get("label")) for v in o]
 
     tweet: InitVar[Tweet]
     quoted: InitVar[Tweet] = None
 
     def __post_init__(self, tweet: Tweet, quoted: Tweet = None):
         self.id = tweet.id
+        self.conversation_id = tweet.conversation_id
         self.text = tweet.text
         self.date = tweet.created_at + LOCALE.td
         self.mentions = (
@@ -40,6 +51,9 @@ class UnderhoodTweet:
             else []
         )
         self.media = [m for m in tweet.attachments.get("media", []) if m] if tweet.attachments else []
+        self.polls = (
+            [UnderhoodTweet.TweetPoll(p) for p in tweet.attachments.get("polls", []) if p] if tweet.attachments else []
+        )
         self.quote = quoted.text if quoted else None
         self.quote_urls = (
             [

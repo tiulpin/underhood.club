@@ -61,7 +61,7 @@ Get author name from description or the first author tweet by using Spacy NER.
 
 ---
 
-<a href="../underhood/author.py#L31"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../underhood/author.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Author`
 Class that represents an author inside some underhood account, tweets and has even few API calls when needed. 
@@ -76,6 +76,7 @@ __init__(
     twitter_token: InitVar[str],
     name: str = '',
     username: str = '',
+    avatar: str = '',
     first_id: InitVar[int] = 0,
     until_id: InitVar[int] = 0
 ) → None
@@ -88,12 +89,6 @@ __init__(
 
 ---
 
-#### <kbd>property</kbd> avatar
-
-Profile image property. 
-
----
-
 #### <kbd>property</kbd> description
 
 Profile description property. 
@@ -102,7 +97,7 @@ Profile description property.
 
 ---
 
-<a href="../underhood/author.py#L90"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../underhood/author.py#L100"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get_tweet`
 

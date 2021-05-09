@@ -61,15 +61,23 @@ class Author:
             )
         ):
             for t in response.data or []:
-                if t.attachments and t.attachments.get("media_keys"):
-                    t.attachments["media"] = [  # v2 api me no like it
-                        m.get("url") or m.get("preview_image_url")
-                        for m in response.includes.get("media", [])
-                        for mkey in t.attachments.get("media_keys")
-                        if m["media_key"] == mkey
-                    ]
+                if t.attachments:
+                    if t.attachments.get("media_keys"):
+                        t.attachments["media"] = [  # v2 api me no like it
+                            m.get("url") or m.get("preview_image_url")
+                            for m in response.includes.get("media", [])
+                            for mkey in t.attachments.get("media_keys", [])
+                            if m["media_key"] == mkey
+                        ]
+                    if t.attachments.get("poll_ids"):
+                        t.attachments["polls"] = [
+                            p.get("options")
+                            for p in response.includes.get("polls", [])
+                            if p.get("id") == t.attachments.get("poll_ids", [0])[0]  # TODO: refactor this
+                        ]
                 all_tweets.append(t)
-        self.timeline: defaultdict[int, list[UnderhoodTweet]] = defaultdict(list)
+        self.timeline = []
+        self.conversations: defaultdict[int, list[UnderhoodTweet]] = defaultdict(list)
         for t in sorted(all_tweets, key=lambda k: k.created_at):
             if not t.text.startswith(("@", "RT @")):
                 tweet = UnderhoodTweet(
@@ -80,11 +88,12 @@ class Author:
                         else None
                     ),
                 )
-                self.timeline[t.conversation_id].append(tweet)
+                self.timeline.append(tweet)
+                self.conversations[tweet.conversation_id].append(tweet)
         if not self.username:
             self.username = extract_username(self)
         if not self.name:
-            self.name = extract_name(self) or "404"
+            self.name = extract_name(self)
         if not self.avatar:
             self.avatar = self.user.data.profile_image_url.replace("_normal", "")
 
@@ -100,19 +109,14 @@ class Author:
         return self.user.data.description
 
     @cached_property
-    def conversations(self) -> list[int]:
-        """All author conversations ids property"""
-        return list(self.timeline.keys())
-
-    @cached_property
     def first_tweet(self):
         """Last author tweet property."""
-        return self.timeline[self.conversations[0]][0]
+        return self.timeline[0]
 
     @cached_property
     def last_tweet(self):
         """Last author tweet property."""
-        return self.timeline[self.conversations[-1]][-1]
+        return self.timeline[-1]
 
 
 def extract_username(author: Author) -> str:
@@ -145,7 +149,8 @@ def extract_name(author: Author) -> str:
 
     def search_name(d):
         """Extract first found two-word string (real person name) from Spacy entities analysis."""
-        return [x.text for x in d.ents if x.label_ == "PER" if len(x.text.split()) > 1][0] or ""
+        names = [x.text for x in d.ents if x.label_ == "PER" if len(x.text.split()) > 1]
+        return names[0] if names else ""
 
     description, tweet = author.description, author.first_tweet
     nlp = load(LOCALE.spacy_model)

@@ -76,6 +76,7 @@ class Page:
             thread_page = self.add(PageBlock)
             thread_page.set("format.block_color", "gray")
             set_page_info(thread_page)
+            self.add(DividerBlock, page=thread_page)
             for tt in thread:
                 self.add(
                     TextBlock,
@@ -91,6 +92,9 @@ class Page:
                     self.add(TextBlock, content=tt.text, page=thread_page)
                 for i in tt.media:
                     self.add(ImageBlock, page=thread_page).set_source_url(i)
+                for p in tt.polls:
+                    for r in p.results:  # improve it someday when polls output will be clear
+                        self.add(TextBlock, content=f"🤔 `{r[0]}` {r[1]}", page=thread_page)
                 self.add(DividerBlock, page=thread_page)
             thread_page.children.add_alias(self.npage)
             self.threads.append(thread_page)
@@ -111,6 +115,9 @@ class Page:
                     self.add(TextBlock, content=tw.text)
                 for i in tw.media:
                     self.add(ImageBlock).set_source_url(i)
+                for p in tw.polls:
+                    for r in p.results:  # improve it someday when polls output will be clear
+                        self.add(TextBlock, content=f"🤔 `{r[0]}` {r[1]}")
                 self.add(DividerBlock)
 
         @retry(wait=wait_random(min=3, max=7))
@@ -127,19 +134,21 @@ class Page:
             content=f"{LOCALE.week_title} "
             f"{md_link(f'@{self.author.username}', f'https://twitter.com/{self.author.username}') if self.author.username else ''}",
         )
-        for c in tqdm(self.author.timeline.keys()):
-            for t in self.author.timeline[c]:
-                check_day(t.date.weekday())
-                add_tweet(t)
-                self.links.extend(t.links)
-                if t is self.author.timeline[c][-1] and len(self.author.timeline[c]) > LOCALE.thread_count:
-                    add_thread(self.author.timeline[c])
-                    self.add(DividerBlock)
+        for t in tqdm(self.author.timeline):
+            check_day(t.date.weekday())
+            add_tweet(t)
+            self.links.extend(t.links)
+            if (
+                t is self.author.conversations[t.conversation_id][-1]
+                and len(self.author.conversations[t.conversation_id]) > LOCALE.thread_count
+            ):
+                add_thread(self.author.conversations[t.conversation_id])
+                self.add(DividerBlock)
         add_links()
         if not self.author.username:
-            self.author.username = self.npage.id.replace("-", "")
+            self.author.username = self.npage.id.replace("-", "")[:7]
         for n, th in enumerate(self.threads):
             self.urls[f"/{self.author.username}-thread-{n + 1}"] = th.id.replace("-", "")
         self.urls[f"/{self.author.username}"] = self.npage.id.replace("-", "")
 
-        print_topics([t.text for c in self.author.timeline.keys() for t in self.author.timeline[c]])
+        print_topics([t.text for t in self.author.timeline])
