@@ -3,8 +3,10 @@ from collections import defaultdict
 from dataclasses import dataclass, InitVar
 from functools import cached_property
 
+from spacy import load
 from tweepy import Client, Paginator, Tweet
 
+from underhood import LOCALE
 from underhood.tweet import UnderhoodTweet
 
 
@@ -28,15 +30,18 @@ media_fields = ["media_key", "type", "url", "preview_image_url"]
 class Author:
     """Class that represents an author inside some underhood account, tweets and has even few API calls when needed."""
 
-    underhood: InitVar[str]
+    underhood: str
     twitter_token: InitVar[str]
+    name: str = ""
+    username: str = ""
+    avatar: str = ""
     first_id: InitVar[int] = 0
     until_id: InitVar[int] = 0
 
-    def __post_init__(self, underhood: str, twitter_token: str, first_id: int = 0, until_id: int = 0):
+    def __post_init__(self, twitter_token: str, first_id: int = 0, until_id: int = 0):
         self.client = Client(twitter_token)
         self.user = self.client.get_user(
-            username=underhood, expansions="pinned_tweet_id", user_fields=["profile_image_url", "description"]
+            username=self.underhood, expansions="pinned_tweet_id", user_fields=["profile_image_url", "description"]
         )
         first_id = first_id or self.user.data.pinned_tweet_id
         _first_tweet = self.get_tweet(first_id)
@@ -76,6 +81,12 @@ class Author:
                     ),
                 )
                 self.timeline[t.conversation_id].append(tweet)
+        if not self.username:
+            self.username = extract_username(self)
+        if not self.name:
+            self.name = extract_name(self) or "404"
+        if not self.avatar:
+            self.avatar = self.user.data.profile_image_url.replace("_normal", "")
 
     def get_tweet(self, tweet_id: int) -> Tweet:
         """Get tweet from Twitter API by id."""
@@ -87,11 +98,6 @@ class Author:
     def description(self) -> str:
         """Profile description property."""
         return self.user.data.description
-
-    @property
-    def avatar(self) -> str:
-        """Profile image property."""
-        return self.user.data.profile_image_url.replace("_normal", "")
 
     @cached_property
     def conversations(self) -> list[int]:
@@ -107,3 +113,40 @@ class Author:
     def last_tweet(self):
         """Last author tweet property."""
         return self.timeline[self.conversations[-1]][-1]
+
+
+def extract_username(author: Author) -> str:
+    """Get username from description or the first author tweet by searching for @.
+
+    Args:
+        author: Author class object
+
+    Returns:
+        username if found else an empty string
+    """
+    description, tweet = author.description, author.first_tweet
+    username = None
+    if "@" in description:
+        username = [h[1:] for h in description.replace("(", " ").replace(")", " ").split() if h.startswith("@")][0]
+    elif e := tweet.mentions:
+        username = e[0].get("username")
+    return username or ""
+
+
+def extract_name(author: Author) -> str:
+    """Get author name from description or the first author tweet by using Spacy NER.
+
+    Args:
+        author: Author class object
+
+    Returns:
+        name if found else an empty string
+    """
+    description, tweet = author.description, author.first_tweet
+    nlp = load(LOCALE.spacy_model)
+    doc = nlp(description)
+    names = [X.text for X in doc.ents if X.label_ == "PER"]
+    if not names:
+        doc = nlp(tweet.text)
+        names = [X.text for X in doc.ents if X.label_ == "PER"]
+    return names[0] if names else ""

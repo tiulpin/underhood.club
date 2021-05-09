@@ -1,7 +1,7 @@
 """Module with strange classes and methods to upload underhood.club data to Notion.
 Waiting for an official Notion API library, then it will be refactored and become a nice library...
 """
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional, Type, Union
 
 from notion.block import (
@@ -16,8 +16,8 @@ from notion.block import (
     SubheaderBlock,
     TextBlock,
 )
+from notion.client import NotionClient
 from notion.collection import NotionDate
-from spacy import load
 from tenacity import retry, wait_random
 from tqdm import tqdm
 
@@ -31,11 +31,16 @@ from underhood.utils import md_link, NotionTableOfContents, print_topics
 class Page:
     """Underhood page as it is."""
 
-    npage: CollectionViewBlock
-    underhood: str
-    threads: list[Union[CollectionViewBlock, EmbedBlock, BookmarkBlock]] = field(default_factory=list)
-    links: list[str] = field(default_factory=list)
+    author: Author
+    client: NotionClient
+    urls: dict[str, str]
     current_day: int = -1
+
+    def __post_init__(self):
+        self.threads = []
+        self.links = []
+        self.archive = self.client.get_block(f"https://www.notion.so/{self.urls['/archive']}")
+        self.npage = self.archive.collection.add_row()
 
     @retry(wait=wait_random(min=3, max=7))
     def add(
@@ -46,15 +51,15 @@ class Page:
         b = page.children.add_new(o, title=content) if content else page.children.add_new(o)
         return b
 
-    def write(self, author: Author) -> str:
+    def write(self) -> None:
         @retry(wait=wait_random(min=3, max=7))
         def set_page_info(page=None):
             if page is None:
-                self.npage.set("format.page_icon", author.avatar)
-                self.npage.title = name if name else "_"
+                self.npage.set("format.page_icon", self.author.avatar)
+                self.npage.title = self.author.name
                 self.npage.nedelia = NotionDate(
-                    start=author.first_tweet.date.date(),
-                    end=author.last_tweet.date.date(),
+                    start=self.author.first_tweet.date.date(),
+                    end=self.author.last_tweet.date.date(),
                 )
             else:
                 page.set("format.page_icon", "🔥")
@@ -76,7 +81,7 @@ class Page:
                     TextBlock,
                     content=md_link(
                         tt.date.strftime("%H:%M"),
-                        f"https://twitter.com/{self.underhood}/status/{tt.id}",
+                        f"https://twitter.com/{self.author.underhood}/status/{tt.id}",
                     ),
                     page=thread_page,
                 ).set("format.block_color", "gray")
@@ -97,7 +102,7 @@ class Page:
                     TextBlock,
                     content=md_link(
                         tw.date.strftime("%H:%M"),
-                        f"https://twitter.com/{self.underhood}/status/{tw.id}",
+                        f"https://twitter.com/{self.author.underhood}/status/{tw.id}",
                     ),
                 ).set("format.block_color", "gray")
                 if tw.quote:
@@ -114,55 +119,27 @@ class Page:
             for k in self.links:
                 self.add(BookmarkBlock).set_new_link(k)
 
-        print(f"{author.description}")
-        username, name = extract_names(author)
+        print(f"{self.author.description}")
         set_page_info()
         self.add(NotionTableOfContents).set("format.block_color", "gray")
         self.add(
             HeaderBlock,
             content=f"{LOCALE.week_title} "
-            f"{md_link(f'@{username}', f'https://twitter.com/{username}') if username else ''}",
+            f"{md_link(f'@{self.author.username}', f'https://twitter.com/{self.author.username}') if self.author.username else ''}",
         )
-        for c in tqdm(author.timeline.keys()):
-            for t in author.timeline[c]:
+        for c in tqdm(self.author.timeline.keys()):
+            for t in self.author.timeline[c]:
                 check_day(t.date.weekday())
                 add_tweet(t)
                 self.links.extend(t.links)
-                if t is author.timeline[c][-1] and len(author.timeline[c]) > LOCALE.thread_count:
-                    add_thread(author.timeline[c])
+                if t is self.author.timeline[c][-1] and len(self.author.timeline[c]) > LOCALE.thread_count:
+                    add_thread(self.author.timeline[c])
                     self.add(DividerBlock)
         add_links()
-        print_topics([t.text for c in author.timeline.keys() for t in author.timeline[c]])
+        if not self.author.username:
+            self.author.username = self.npage.id.replace("-", "")
+        for n, th in enumerate(self.threads):
+            self.urls[f"/{self.author.username}-thread-{n + 1}"] = th.id.replace("-", "")
+        self.urls[f"/{self.author.username}"] = self.author.username
 
-        return username if username else self.npage.id[:7]
-
-
-def extract_names(author: Author) -> tuple[Optional[str], Optional[str]]:
-    """Returns the first name in the given text (first tweet + description) using spacy named entity recognition and
-    twitter username (from API field).
-
-    Args:
-        author: Underhood author object
-
-    Returns:
-        name and username, if found
-    """
-    description, tweet = author.description, author.first_tweet
-    username = None
-    if e := tweet.mentions:
-        username = e[0].get("username")
-    elif "@" in description:
-        username = [h[1:] for h in description.replace("(", " ").replace(")", " ").split() if h.startswith("@")][0]
-
-    nlp = load(LOCALE.spacy_model)
-    doc = nlp(tweet.text)
-    names = [X.text for X in doc.ents if X.label_ == "PER"]
-
-    if names and len(names[0].split()) > 1:
-        name = names[0]
-    else:
-        doc = nlp(description)
-        names = [X.text for X in doc.ents if X.label_ == "PER"]
-        name = names[-1] if names else None
-
-    return username, name
+        print_topics([t.text for c in self.author.timeline.keys() for t in self.author.timeline[c]])

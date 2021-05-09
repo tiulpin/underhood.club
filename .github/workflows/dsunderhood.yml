@@ -6,11 +6,23 @@ on:
   workflow_dispatch:
     inputs:
       first_tweet:
-        description: 'From tweet (URL, will be included)'
+        description: 'From tweet override (URL, will be included)'
         default: ''
         required: false
       last_tweet:
-        description: 'Until tweet (URL, will not be included)'
+        description: 'Until tweet override (URL, will not be included)'
+        default: ''
+        required: false
+      username:
+        description: 'Author username override'
+        default: ''
+        required: false
+      name:
+        description: 'Author name override'
+        default: ''
+        required: false
+      avatar:
+        description: 'Avatar override'
         default: ''
         required: false
 
@@ -22,15 +34,19 @@ jobs:
       env:
         FIRST_TWEET: ${{ github.event.inputs.first_tweet }}
         LAST_TWEET: ${{ github.event.inputs.last_tweet }}
+        AVATAR: ${{ github.event.inputs.avatar }}
+        NAME: ${{ github.event.inputs.name }}
+        USERNAME: ${{ github.event.inputs.username }}
         TWITTER_TOKEN: ${{ secrets.TWITTER_TOKEN }}
         NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-        UNDERHOOD: dsunderhood
+        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        UNDERHOOD: "dsunderhood"
     steps:
       - name: Pull latest repository
         uses: actions/checkout@v2
         with:
-          repository: tiulpin/dsunderhood
-          path: ./dsunderhood
+          repository: tiulpin/${{ env.UNDERHOOD }}
+          path: ./${{ env.UNDERHOOD }}
           token: ${{ secrets.ACCESS_TOKEN }}
       - run: underhood
       - name: Push latest URLs
@@ -38,5 +54,5 @@ jobs:
         with:
           github_token: ${{ secrets.ACCESS_TOKEN }}
           branch: main
-          directory: dsunderhood
-          repository: tiulpin/dsunderhood
+          directory: ${{ env.UNDERHOOD }}
+          repository: tiulpin/${{ env.UNDERHOOD }}
