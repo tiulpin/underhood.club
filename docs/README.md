@@ -26,4 +26,5 @@
 - [`utils.clean_tweets`](./utils.md#function-clean_tweets): Prepare (clean) tweet texts for running topic modeling on it.
 - [`utils.md_link`](./utils.md#function-md_link): Make Markdown link from the given URL.
 - [`utils.print_topics`](./utils.md#function-print_topics): Pretty simple topic-modeling with LDA model on tweets: print the results right into stdout.
+- [`utils.slug_from_id`](./utils.md#function-slug_from_id): Extract Notion page slug from the given id.
 - [`utils.tweet_id_from_url`](./utils.md#function-tweet_id_from_url): Obtain tweet id from environment (from URL).

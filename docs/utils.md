@@ -78,6 +78,19 @@ Obtain tweet id from environment (from URL). e.g. https://twitter.com/dsunderhoo
 
 ---
 
+<a href="../underhood/utils.py#L95"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `slug_from_id`
+
+```python
+slug_from_id(page_id: str) → str
+```
+
+Extract Notion page slug from the given id. e.g. lwuf-kj3r-fdw32-mnaks -> lwufkj3rfdw32mnaks 
+
+
+---
+
 <a href="../underhood/utils.py#L17"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `NotionTableOfContents`

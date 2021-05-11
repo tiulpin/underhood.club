@@ -9,7 +9,7 @@ Module with strange classes and methods to upload underhood.club data to Notion.
 
 ---
 
-<a href="../underhood/page.py#L32"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../underhood/page.py#L30"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Page`
 Underhood page as it is. 
@@ -36,7 +36,7 @@ __init__(
 
 ---
 
-<a href="../.venv/lib/python3.9/site-packages/tenacity/__init__.py#L47"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../.venv/lib/python3.9/site-packages/tenacity/__init__.py#L50"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `add`
 
@@ -54,7 +54,7 @@ add(
 
 ---
 
-<a href="../underhood/page.py#L56"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../underhood/page.py#L59"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `write`
 

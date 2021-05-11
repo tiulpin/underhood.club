@@ -13,7 +13,7 @@ Everything related to Twitter API happens right here.
 
 ---
 
-<a href="../underhood/author.py#L122"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../underhood/author.py#L130"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `extract_username`
 
@@ -37,7 +37,7 @@ Get username from description or the first author tweet by searching for @.
 
 ---
 
-<a href="../underhood/author.py#L140"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../underhood/author.py#L152"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `extract_name`
 
@@ -61,7 +61,7 @@ Get author name from description or the first author tweet by using Spacy NER.
 
 ---
 
-<a href="../underhood/author.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../underhood/author.py#L30"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Author`
 Class that represents an author inside some underhood account, tweets and has even few API calls when needed. 
@@ -76,6 +76,7 @@ __init__(
     twitter_token: InitVar[str],
     name: str = '',
     username: str = '',
+    has_twitter: bool = True,
     avatar: str = '',
     first_id: InitVar[int] = 0,
     until_id: InitVar[int] = 0
@@ -89,6 +90,12 @@ __init__(
 
 ---
 
+#### <kbd>property</kbd> author_hash
+
+Internal first author tweet hash needed for different purposes. 
+
+---
+
 #### <kbd>property</kbd> description
 
 Profile description property. 
@@ -97,7 +104,7 @@ Profile description property.
 
 ---
 
-<a href="../underhood/author.py#L100"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../underhood/author.py#L102"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get_tweet`
 

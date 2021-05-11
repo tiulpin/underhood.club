@@ -90,3 +90,9 @@ def tweet_id_from_url(url: str) -> int:
     e.g. https://twitter.com/dsunderhood/status/1384130447999787017?s=20 -> 1384130447999787017
     """
     return int(url.split("/")[-1].split("?")[0]) if url and isinstance(url, str) else 0
+
+
+def slug_from_id(page_id: str) -> str:
+    """Extract Notion page slug from the given id.
+    e.g. lwuf-kj3r-fdw32-mnaks -> lwufkj3rfdw32mnaks"""
+    return page_id.replace("-", "")

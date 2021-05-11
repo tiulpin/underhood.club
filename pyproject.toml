@@ -5,7 +5,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "underhood"
-version = "2.1.0"
+version = "2.2.0"
 description = "A 'small' utility, which download tweets and uploads to Notion, prototyped fastly for underhood.club"
 authors = ["tiulpin <viktor@tiulp.in>"]
 readme = "README.md"
@@ -17,7 +17,7 @@ homepage = "https://github.com/tiulpin/underhood.club"
 "Bug Tracker" = "https://github.com/tiulpin/underhood.club/issues"
 
 [tool.poetry.scripts]
-underhood = "underhood.__main__:launch"
+underhood = "underhood.__main__:app"
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -32,6 +32,7 @@ typer = "^0.3.2"
 sentry-sdk = "^1.1.0"
 tweepy = {git = "https://github.com/tweepy/tweepy.git", branch = "master"}
 notion = {git = "https://github.com/tiulpin/notion-py"}
+python-telegram-bot = "^13.5"
 
 [tool.taskipy.tasks]
 docker = "docker build -t ghcr.io/tiulpin/underhood:latest -f Dockerfile ."
