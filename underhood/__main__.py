@@ -1,11 +1,13 @@
 """Underhood entrypoint."""
 from json import dumps, loads
+from os import getenv
 from pathlib import Path
 
 from notion.client import NotionClient
 import pretty_errors
 import sentry_sdk
-from typer import Argument, Option, run
+from telegram import Bot, ParseMode
+from typer import Argument, Option, Typer
 
 from underhood.author import Author
 from underhood.page import Page
@@ -14,8 +16,15 @@ from underhood.utils import tweet_id_from_url
 
 pretty_errors.configure(filename_display=pretty_errors.FILENAME_EXTENDED, line_number_first=True, display_link=True)
 
+sentry_dsn: str = getenv("SENTRY_DSN", "")
+if sentry_dsn:
+    sentry_sdk.init(sentry_dsn, traces_sample_rate=1.0)  # since we don't need speed, let's send everything!
 
-def main(
+app = Typer()
+
+
+@app.command()
+def dump(
     underhood: str = Argument(..., envvar="UNDERHOOD", help="underhood name"),
     notion_token: str = Option(..., "--notion-token", "-nt", envvar="NOTION_TOKEN", help="unofficial Notion API token"),
     twitter_token: str = Option(..., "--twitter-token", "-tt", envvar="TWITTER_TOKEN", help="Twitter APIv2 token"),
@@ -28,12 +37,10 @@ def main(
     until_tweet: str = Option(
         None, "--until-tweet", "-ut", envvar="LAST_TWEET", help="Tweet to dump to [not included to dump]"
     ),
-    sentry_dsn: str = Option(None, "--sentry-dsn", "-s", envvar="SENTRY_DSN"),
     no_email_auth: bool = Option(False, "-ne", envvar="NO_EMAIL"),
 ):
-    if sentry_dsn:
-        sentry_sdk.init(sentry_dsn, traces_sample_rate=1.0)  # since we don't need speed, let's send everything!
     urls_path = Path(".") / underhood / "urls.json"
+    telethreads_path = Path(".") / underhood / "telethreads.json"
     underhood_page = Page(
         author=Author(
             underhood,
@@ -52,12 +59,47 @@ def main(
         urls=loads(urls_path.read_text()),
     )
     underhood_page.write()
+    # TODO: okay, we definitely need some MongoDB here
     urls_path.write_text(dumps(underhood_page.urls, indent=4))
+    telethreads = loads(telethreads_path.read_text())
+    for t in underhood_page.threads:
+        if all(m["message"] != t["message"] for m in telethreads["threads"]):
+            telethreads["threads"].append(
+                {
+                    "iv_url": f"https://t.me/iv?url={telethreads['base']}{t['url']}&{telethreads['rhash']}",
+                    "url": f"{telethreads['base']}{t['url']}",
+                    "message": t["message"],
+                    "sent": False,
+                }
+            )
+
+    telethreads_path.write_text(dumps(telethreads, indent=4, ensure_ascii=False))
 
 
-def launch():
-    run(main)
+@app.command()
+def telethread(
+    underhood: str = Argument(..., envvar="UNDERHOOD", help="underhood name"),
+    telegram_token: str = Option(..., "--telegram-token", "-tt", envvar="TELEGRAM_TOKEN", help="Telegram token"),
+):
+    telethreads_path = Path(".") / underhood / "telethreads.json"
+    telethreads = loads(telethreads_path.read_text())
+    bot = Bot(token=telegram_token)
+    if telethreads["threads"] and any(not t["sent"] for t in telethreads["threads"]):
+        bot.sendMessage(
+            chat_id=telethreads["channel"],
+            text=telethreads["greetings"],
+            parse_mode=ParseMode.MARKDOWN,
+        )
+        for t in telethreads["threads"]:
+            if not t["sent"]:
+                bot.sendMessage(
+                    chat_id=telethreads["channel"],
+                    text=f"{t['message']}\n\n[{t['url']}]({t['iv_url']})",
+                    parse_mode=ParseMode.MARKDOWN,
+                )
+                t["sent"] = True
+    telethreads_path.write_text(dumps(telethreads, indent=4, ensure_ascii=False))
 
 
 if __name__ == "__main__":
-    launch()
+    app()

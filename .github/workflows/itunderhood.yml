@@ -1,8 +1,8 @@
-name: 'weekly 👩‍💻 itunderhood'
+name: 'daily 👩‍💻 itunderhood'
 
 on:
   schedule:
-    - cron: '0 0 * * MON'
+    - cron: '0 1 * * *'
   workflow_dispatch:
     inputs:
       first_tweet:
@@ -48,7 +48,7 @@ jobs:
           repository: tiulpin/itunderhood
           path: ./itunderhood
           token: ${{ secrets.ACCESS_TOKEN }}
-      - run: underhood
+      - run: underhood dump
       - name: Push latest URLs
         uses: actions-js/push@master
         with:

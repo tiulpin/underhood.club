@@ -2,6 +2,7 @@
 from collections import defaultdict
 from dataclasses import dataclass, InitVar
 from functools import cached_property
+import hashlib
 
 from spacy import load
 from tweepy import Client, Paginator, Tweet
@@ -34,6 +35,7 @@ class Author:
     twitter_token: InitVar[str]
     name: str = ""
     username: str = ""
+    has_twitter: bool = True
     avatar: str = ""
     first_id: InitVar[int] = 0
     until_id: InitVar[int] = 0
@@ -78,7 +80,7 @@ class Author:
                 all_tweets.append(t)
         self.timeline = []
         self.conversations: defaultdict[int, list[UnderhoodTweet]] = defaultdict(list)
-        for t in sorted(all_tweets, key=lambda k: k.created_at):
+        for t in sorted(all_tweets, key=lambda k: k.id):
             if not t.text.startswith(("@", "RT @")):
                 tweet = UnderhoodTweet(
                     tweet=t,
@@ -91,7 +93,7 @@ class Author:
                 self.timeline.append(tweet)
                 self.conversations[tweet.conversation_id].append(tweet)
         if not self.username:
-            self.username = extract_username(self)
+            self.username = extract_username(self) or self.author_hash
         if not self.name:
             self.name = extract_name(self)
         if not self.avatar:
@@ -102,6 +104,12 @@ class Author:
         return self.client.get_tweet(
             id=tweet_id, expansions=expansions, tweet_fields=tweet_fields, media_fields=media_fields
         ).data
+
+    @property
+    def author_hash(self) -> str:
+        """Internal first author tweet hash needed for different purposes."""
+        self.has_twitter = False
+        return hashlib.sha256(self.first_tweet.text.encode()).hexdigest()[:7]
 
     @property
     def description(self) -> str:
@@ -131,7 +139,11 @@ def extract_username(author: Author) -> str:
     description, tweet = author.description, author.first_tweet
     username = None
     if "@" in description:
-        username = [h[1:] for h in description.replace("(", " ").replace(")", " ").split() if h.startswith("@")][0]
+        username = [
+            h[1:]
+            for h in description.replace("(", " ").replace(")", " ").replace(",", " ").split()
+            if h.startswith("@")
+        ][0]
     elif e := tweet.mentions:
         username = e[0]
     return username or ""

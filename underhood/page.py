@@ -24,7 +24,7 @@ from tqdm import tqdm
 from underhood import LOCALE
 from underhood.author import Author
 from underhood.tweet import UnderhoodTweet
-from underhood.utils import md_link, NotionTableOfContents, print_topics
+from underhood.utils import md_link, NotionTableOfContents, print_topics, slug_from_id
 
 
 @dataclass
@@ -40,7 +40,12 @@ class Page:
         self.threads = []
         self.links = []
         self.archive = self.client.get_block(f"https://www.notion.so/{self.urls['/archive']}")
+        if (u := f"/{self.author.username}") in self.urls:
+            ppage = self.client.get_block(f"https://www.notion.so/{self.urls[u]}")
+            self.author.name = ppage.title
+            ppage.remove()
         self.npage = self.archive.collection.add_row()
+        self.urls[f"/{self.author.username}"] = slug_from_id(self.npage.id)
 
     @retry(wait=wait_random(min=3, max=7))
     def add(
@@ -97,7 +102,13 @@ class Page:
                         self.add(TextBlock, content=f"🤔 `{r[0]}` {r[1]}", page=thread_page)
                 self.add(DividerBlock, page=thread_page)
             thread_page.children.add_alias(self.npage)
-            self.threads.append(thread_page)
+            self.threads.append(
+                {
+                    "url": f"/{self.author.username}-thread-{len(self.threads) + 1}",
+                    "slug": slug_from_id(thread_page.id),
+                    "message": thread[0].text,
+                }
+            )
 
         @retry(wait=wait_random(min=3, max=7))
         def add_tweet(tw: UnderhoodTweet) -> None:
@@ -122,9 +133,10 @@ class Page:
 
         @retry(wait=wait_random(min=3, max=7))
         def add_links() -> None:
-            self.add(HeaderBlock, content=LOCALE.links_title)
-            for k in self.links:
-                self.add(BookmarkBlock).set_new_link(k)
+            if self.links:
+                self.add(HeaderBlock, content=LOCALE.links_title)
+                for k in self.links:
+                    self.add(BookmarkBlock).set_new_link(k)
 
         print(f"{self.author.description}")
         set_page_info()
@@ -132,7 +144,7 @@ class Page:
         self.add(
             HeaderBlock,
             content=f"{LOCALE.week_title} "
-            f"{md_link(f'@{self.author.username}', f'https://twitter.com/{self.author.username}') if self.author.username else ''}",
+            f"{md_link(f'@{self.author.username}', f'https://twitter.com/{self.author.username}') if self.author.username and self.author.has_twitter else ''}",
         )
         for t in tqdm(self.author.timeline):
             check_day(t.date.weekday())
@@ -140,15 +152,11 @@ class Page:
             self.links.extend(t.links)
             if (
                 t is self.author.conversations[t.conversation_id][-1]
-                and len(self.author.conversations[t.conversation_id]) > LOCALE.thread_count
+                and len(self.author.conversations[t.conversation_id]) >= LOCALE.thread_count
             ):
                 add_thread(self.author.conversations[t.conversation_id])
                 self.add(DividerBlock)
         add_links()
-        if not self.author.username:
-            self.author.username = self.npage.id.replace("-", "")[:7]
-        for n, th in enumerate(self.threads):
-            self.urls[f"/{self.author.username}-thread-{n + 1}"] = th.id.replace("-", "")
-        self.urls[f"/{self.author.username}"] = self.npage.id.replace("-", "")
-
+        for th in self.threads:
+            self.urls[th["url"]] = th["slug"]
         print_topics([t.text for t in self.author.timeline])

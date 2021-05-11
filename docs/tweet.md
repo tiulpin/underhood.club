@@ -12,7 +12,7 @@ UnderhoodTweet module.
 
 ---
 
-<a href="../underhood/tweet.py#L13"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../underhood/tweet.py#L10"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `UnderhoodTweet`
 Internal representation of a tweet which is used to publish it in Notion. 
