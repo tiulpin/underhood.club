@@ -21,9 +21,9 @@ class NotionTableOfContents(BasicBlock):
     _type = "table_of_contents"
 
 
-def md_link(display: str, url: str) -> str:
+def md_link(display: str, real_url: str) -> str:
     """Make Markdown link from the given URL."""
-    return f"[{display}]({url})"
+    return f"[{display}]({real_url})"
 
 
 def clean_tweets(tweets: list[str]) -> tuple[Dictionary, list[list[tuple[int, int]]]]:
@@ -86,11 +86,11 @@ def print_topics(tweets: list[str]) -> None:
     pprint(model.print_topics())
 
 
-def tweet_id_from_url(url: str) -> int:
+def tweet_id_from_url(tweet_url: str) -> int:
     """Obtain tweet id from environment (from URL).
     e.g. https://twitter.com/dsunderhood/status/1384130447999787017?s=20 -> 1384130447999787017
     """
-    return int(url.split("/")[-1].split("?")[0]) if url and isinstance(url, str) else 0
+    return int(tweet_url.split("/")[-1].split("?")[0]) if tweet_url and isinstance(tweet_url, str) else 0
 
 
 def slug_from_id(page_id: str) -> str:
