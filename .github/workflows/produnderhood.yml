@@ -48,7 +48,7 @@ jobs:
           repository: tiulpin/produnderhood
           path: ./produnderhood
           token: ${{ secrets.ACCESS_TOKEN }}
-      - run: underhood
+      - run: underhood dump
       - name: Push latest URLs
         uses: actions-js/push@master
         with:
