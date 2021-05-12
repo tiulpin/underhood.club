@@ -231,6 +231,14 @@ optional = false
 python-versions = ">=3.6,<4.0"
 
 [[package]]
+name = "decorator"
+version = "5.0.7"
+description = "Decorators for Humans"
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[[package]]
 name = "dictdiffer"
 version = "0.8.1"
 description = "Dictdiffer is a library that helps you to diff and patch dictionaries."
@@ -1197,6 +1205,21 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 brotli = ["brotlipy (>=0.6.0)"]
 
 [[package]]
+name = "validators"
+version = "0.18.2"
+description = "Python Data Validation for Humans™."
+category = "main"
+optional = false
+python-versions = ">=3.4"
+
+[package.dependencies]
+decorator = ">=3.4.0"
+six = ">=1.4.0"
+
+[package.extras]
+test = ["pytest (>=2.2.3)", "flake8 (>=2.4.0)", "isort (>=4.2.2)"]
+
+[[package]]
 name = "virtualenv"
 version = "20.4.6"
 description = "Virtual Python Environment builder"
@@ -1233,7 +1256,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "c95e6d599fb004f2d10ccc71304a2937809b54f16db2d9783fe8e4c77f17b780"
+content-hash = "ad773459de5d99a5f0d31cc3be08abf723b80405eb33a2bd8fb4261c9256a860"
 
 [metadata.files]
 appdirs = [
@@ -1371,6 +1394,10 @@ cython = [
 darglint = [
     {file = "darglint-1.8.0-py3-none-any.whl", hash = "sha256:ac6797bcc918cd8d8f14c168a4a364f54e1aeb4ced59db58e7e4c6dfec2fe15c"},
     {file = "darglint-1.8.0.tar.gz", hash = "sha256:aa605ef47817a6d14797d32b390466edab621768ea4ca5cc0f3c54f6d8dcaec8"},
+]
+decorator = [
+    {file = "decorator-5.0.7-py3-none-any.whl", hash = "sha256:945d84890bb20cc4a2f4a31fc4311c0c473af65ea318617f13a7257c9a58bc98"},
+    {file = "decorator-5.0.7.tar.gz", hash = "sha256:6f201a6c4dac3d187352661f508b9364ec8091217442c9478f1f83c003a0f060"},
 ]
 dictdiffer = [
     {file = "dictdiffer-0.8.1-py2.py3-none-any.whl", hash = "sha256:d79d9a39e459fe33497c858470ca0d2e93cb96621751de06d631856adfd9c390"},
@@ -2059,6 +2086,10 @@ tzlocal = [
 urllib3 = [
     {file = "urllib3-1.26.4-py2.py3-none-any.whl", hash = "sha256:2f4da4594db7e1e110a944bb1b551fdf4e6c136ad42e4234131391e21eb5b0df"},
     {file = "urllib3-1.26.4.tar.gz", hash = "sha256:e7b021f7241115872f92f43c6508082facffbd1c048e3c6e2bb9c2a157e28937"},
+]
+validators = [
+    {file = "validators-0.18.2-py3-none-any.whl", hash = "sha256:0143dcca8a386498edaf5780cbd5960da1a4c85e0719f3ee5c9b41249c4fefbd"},
+    {file = "validators-0.18.2.tar.gz", hash = "sha256:37cd9a9213278538ad09b5b9f9134266e7c226ab1fede1d500e29e0a8fbb9ea6"},
 ]
 virtualenv = [
     {file = "virtualenv-20.4.6-py2.py3-none-any.whl", hash = "sha256:307a555cf21e1550885c82120eccaf5acedf42978fd362d32ba8410f9593f543"},

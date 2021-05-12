@@ -24,7 +24,7 @@ from tqdm import tqdm
 from underhood import LOCALE
 from underhood.author import Author
 from underhood.tweet import UnderhoodTweet
-from underhood.utils import md_link, NotionTableOfContents, print_topics, slug_from_id
+from underhood.utils import hide_urls, md_link, NotionTableOfContents, print_topics, slug_from_id
 
 
 @dataclass
@@ -106,7 +106,7 @@ class Page:
                 {
                     "url": f"/{self.author.username}-thread-{len(self.threads) + 1}",
                     "slug": slug_from_id(thread_page.id),
-                    "message": thread[0].text,
+                    "message": f"💬 *{thread[0].quote}*\n" if thread[0].quote else "" + thread[0].text,
                 }
             )
 
