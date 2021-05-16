@@ -1,4 +1,5 @@
 """Underhood entrypoint."""
+from datetime import datetime
 from json import dumps, loads
 from os import getenv
 from pathlib import Path
@@ -59,7 +60,8 @@ def dump(
         urls=loads(urls_path.read_text()),
     )
     underhood_page.write()
-    # TODO: okay, we definitely need some MongoDB here
+    # TODO: okay, we definitely need some S3 here
+    # also, move it to a separated module
     urls_path.write_text(dumps(underhood_page.urls, indent=4))
     telethreads = loads(telethreads_path.read_text())
     for t in underhood_page.threads:
@@ -72,7 +74,16 @@ def dump(
                     "sent": False,
                 }
             )
-
+    if datetime.today().weekday() == 0:
+        telethreads["threads"].append(
+            {
+                "iv_url": f"https://t.me/iv?url={telethreads['base']}/{underhood_page.author.username}&"
+                f"{telethreads['rhash']}",
+                "url": f"{telethreads['base']}/{underhood_page.author.username}",
+                "message": f"😎 Вся прошлая неделя выгружена в архив!",
+                "sent": False,
+            }
+        )
     telethreads_path.write_text(dumps(telethreads, indent=4, ensure_ascii=False))
 
 
