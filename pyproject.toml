@@ -52,7 +52,7 @@ pylint = "^2.7.2"
 pydocstyle = "^6.0.0"
 pre-commit = "^2.11.0"
 lazydocs = "^0.4.6"
-taskipy = "^1.7.0"
+taskipy = "^1.8.1"
 
 [tool.isort]
 profile = "pycharm"
