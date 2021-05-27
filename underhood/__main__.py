@@ -105,7 +105,7 @@ def telethread(
             if not t["sent"]:
                 bot.sendMessage(
                     chat_id=telethreads["channel"],
-                    text=f"[▸]({t['iv_url']}){(t['message'])}",
+                    text=f"[▸]({t['iv_url']}) {(t['message'])}",
                     parse_mode=ParseMode.MARKDOWN,
                 )
                 t["sent"] = True
