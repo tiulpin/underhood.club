@@ -1,0 +1,32 @@
+name: 'send 💼 telethreads'
+
+on:
+  schedule:
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+
+jobs:
+  produnderhood:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/tiulpin/underhood
+      env:
+        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        UNDERHOOD: produnderhood
+    steps:
+      - name: Pull latest repo
+        uses: actions/checkout@v2
+        with:
+          repository: tiulpin/produnderhood
+          path: ./produnderhood
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - run: underhood telethread
+      - name: Push latest telethreads
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.ACCESS_TOKEN }}
+          branch: main
+          directory: produnderhood
+          repository: tiulpin/produnderhood
+

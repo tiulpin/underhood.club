@@ -97,8 +97,3 @@ def slug_from_id(page_id: str) -> str:
     """Extract Notion page slug from the given id.
     e.g. lwuf-kj3r-fdw32-mnaks -> lwufkj3rfdw32mnaks"""
     return page_id.replace("-", "")
-
-
-def hide_urls(text: str) -> str:
-    """Hide any URL to markdown src tag and completely remove twitter URLs to make links unpreviewable in Telegram."""
-    return " ".join([f"`{t}`" if url(t) else t for t in text.split() if "twitter.com" not in t])

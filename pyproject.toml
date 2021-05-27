@@ -5,7 +5,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "underhood"
-version = "2.2.0"
+version = "2.2.1"
 description = "A 'small' utility, which download tweets and uploads to Notion, prototyped fastly for underhood.club"
 authors = ["tiulpin <viktor@tiulp.in>"]
 readme = "README.md"

@@ -1,0 +1,31 @@
+name: 'send 📱 telethreads'
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  mobileunderhood:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/tiulpin/underhood
+      env:
+        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        UNDERHOOD: mobileunderhood
+    steps:
+      - name: Pull latest repo
+        uses: actions/checkout@v2
+        with:
+          repository: tiulpin/mobileunderhood
+          path: ./mobileunderhood
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - run: underhood telethread
+      - name: Push latest telethreads
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.ACCESS_TOKEN }}
+          branch: main
+          directory: mobileunderhood
+          repository: tiulpin/mobileunderhood

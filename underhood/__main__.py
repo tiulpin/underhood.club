@@ -12,7 +12,7 @@ from typer import Argument, Option, Typer
 
 from underhood.author import Author
 from underhood.page import Page
-from underhood.utils import hide_urls, tweet_id_from_url
+from underhood.utils import tweet_id_from_url
 
 
 pretty_errors.configure(filename_display=pretty_errors.FILENAME_EXTENDED, line_number_first=True, display_link=True)
@@ -105,7 +105,7 @@ def telethread(
             if not t["sent"]:
                 bot.sendMessage(
                     chat_id=telethreads["channel"],
-                    text=f"{hide_urls(t['message'])}\n\n[{t['url']}]({t['iv_url']})",
+                    text=f"[▸]({t['iv_url']}){(t['message'])}",
                     parse_mode=ParseMode.MARKDOWN,
                 )
                 t["sent"] = True
