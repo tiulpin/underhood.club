@@ -5,7 +5,7 @@
 The monorepo contains everything what's needed.
 
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-380/)
-[![DeepSource](https://deepsource.io/gh/tiulpin/underhood.club.svg/?label=active+issues&token=O2vpl_Y605V0lrWbaTTOTNTh)](https://deepsource.io/gh/tiulpin/underhood.club/?ref=repository-badge)
+[![DeepSource](https://deepsource.io/gh/tiulpin/underhood.club.svg/?label=active+issues&show_trend=true&token=O2vpl_Y605V0lrWbaTTOTNTh)](https://deepsource.io/gh/tiulpin/underhood.club/?ref=repository-badge)
 [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/tiulpin/overhood/blob/master/.pre-commit-config.yaml)
 [![License](https://img.shields.io/github/license/tiulpin/underhood.club)](https://github.com/tiulpin/underhood.club/blob/main/LICENSE)
 [![Dependencies Status](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)](https://github.com/tiulpin/overhood/pulls?utf8=%E2%9C%93&q=is%3Apr%20author%3Aapp%2Fdependabot)
