@@ -80,7 +80,7 @@ def dump(
                 "iv_url": f"https://t.me/iv?url={telethreads['base']}/{underhood_page.author.username}&"
                 f"{telethreads['rhash']}",
                 "url": f"{telethreads['base']}/{underhood_page.author.username}",
-                "message": f"😎 Вся прошлая неделя выгружена в архив!",
+                "message": "😎 Вся прошлая неделя выгружена в архив!",
                 "sent": False,
             }
         )
