@@ -68,7 +68,7 @@ class Page:
                 )
             else:
                 page.set("format.page_icon", "🔥")
-                page.title = f"{LOCALE.thread} #{len(self.threads) + 1}"
+                page.title = f"{LOCALE.thread} ({self.author.name})"
 
         @retry(wait=wait_random(min=3, max=7))
         def check_day(weekday: int) -> None:
@@ -138,13 +138,17 @@ class Page:
                 for k in self.links:
                     self.add(BookmarkBlock).set_new_link(k)
 
+        def get_header() -> str:
+            if self.author.username and self.author.has_twitter:
+                return md_link(f"@{self.author.username}", f"https://twitter.com/{self.author.username}")
+            return ""
+
         print(f"{self.author.description}")
         set_page_info()
         self.add(NotionTableOfContents).set("format.block_color", "gray")
         self.add(
             HeaderBlock,
-            content=f"{LOCALE.week_title} "
-            f"{md_link(f'@{self.author.username}', f'https://twitter.com/{self.author.username}') if self.author.username and self.author.has_twitter else ''}",
+            content=f"{LOCALE.week_title} {get_header()}",
         )
         for t in tqdm(self.author.timeline):
             check_day(t.date.weekday())

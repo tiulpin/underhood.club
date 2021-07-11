@@ -64,6 +64,9 @@ def dump(
     # also, move it to a separated module
     urls_path.write_text(dumps(underhood_page.urls, indent=4))
     telethreads = loads(telethreads_path.read_text())
+    telethreads["current_first_tweet"] = underhood_page.author.first_tweet.text
+    if datetime.today().weekday() == 1:
+        telethreads["threads"] = []
     for t in underhood_page.threads:
         if all(m["message"] != t["message"] for m in telethreads["threads"]):
             telethreads["threads"].append(
@@ -92,9 +95,16 @@ def telethread(
     underhood: str = Argument(..., envvar="UNDERHOOD", help="underhood name"),
     telegram_token: str = Option(..., "--telegram-token", "-tt", envvar="TELEGRAM_TOKEN", help="Telegram token"),
 ):
+    """Send telethreads – runs daily."""
     telethreads_path = Path(".") / underhood / "telethreads.json"
     telethreads = loads(telethreads_path.read_text())
     bot = Bot(token=telegram_token)
+    problems = []
+    if datetime.today().weekday() == 1:
+        message = bot.sendMessage(
+            chat_id=telethreads["channel"], text=telethreads["current_first_tweet"], parse_mode=ParseMode.MARKDOWN
+        )
+        bot.pinChatMessage(chat_id=telethreads["channel"], message_id=message.message_id)
     if telethreads["threads"] and any(not t["sent"] for t in telethreads["threads"]):
         bot.sendMessage(
             chat_id=telethreads["channel"],
@@ -103,13 +113,20 @@ def telethread(
         )
         for t in telethreads["threads"]:
             if not t["sent"]:
-                bot.sendMessage(
-                    chat_id=telethreads["channel"],
-                    text=f"[▸]({t['iv_url']}) {(t['message'])}",
-                    parse_mode=ParseMode.MARKDOWN,
-                )
+                try:
+                    bot.sendMessage(
+                        chat_id=telethreads["channel"],
+                        text=f"[▸]({t['iv_url']}) {(t['message'])}",
+                        parse_mode=ParseMode.MARKDOWN,
+                    )
+                except Exception as e:
+                    problems.append(e)
+                    pass
                 t["sent"] = True
     telethreads_path.write_text(dumps(telethreads, indent=4, ensure_ascii=False))
+    if problems:
+        print(problems)
+        raise problems[0]
 
 
 if __name__ == "__main__":

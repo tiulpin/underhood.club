@@ -3,7 +3,9 @@ from collections import defaultdict
 from dataclasses import dataclass, InitVar
 from functools import cached_property
 import hashlib
+from os import environ
 
+from imgurpython import ImgurClient
 from spacy import load
 from tweepy import Client, Paginator, Tweet
 
@@ -97,7 +99,10 @@ class Author:
         if not self.name:
             self.name = extract_name(self)
         if not self.avatar:
-            self.avatar = self.user.data.profile_image_url.replace("_normal", "")
+            self.imgur_client = ImgurClient(environ.get("IMGUR_API_ID"), environ.get("IMGUR_API_SECRET"))
+            image = self.user.data.profile_image_url.replace("_normal", "")
+            response = self.imgur_client.upload_from_path(image, anon=True)
+            self.avatar = response["link"]
 
     def get_tweet(self, tweet_id: int) -> Tweet:
         """Get tweet from Twitter API by id."""

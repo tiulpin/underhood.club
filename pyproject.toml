@@ -5,7 +5,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "underhood"
-version = "2.2.1"
+version = "2.3.0"
 description = "A 'small' utility, which download tweets and uploads to Notion, prototyped fastly for underhood.club"
 authors = ["tiulpin <viktor@tiulp.in>"]
 readme = "README.md"
@@ -34,14 +34,19 @@ tweepy = {git = "https://github.com/tweepy/tweepy.git", branch = "master"}
 notion = {git = "https://github.com/tiulpin/notion-py"}
 python-telegram-bot = "^13.5"
 validators = "^0.18.2"
+imgurpython = "^1.1.7"
 
 [tool.taskipy.tasks]
 docker = "docker build -t ghcr.io/tiulpin/underhood:latest -f Dockerfile ."
+lint = "flakehell lint && isort --check-only . && black --check . && mypy --ignore-missing-imports underhood"
 
 [tool.poetry.dev-dependencies]
 python-dotenv = "^0.15.0"
 darglint = "^1.5.8"
 isort = "^5.7.0"
+flakehell = "^0.9.0"
+flake8 = "^3.8.3"
+flake8-absolute-import = "^1.0"
 pyupgrade = "^2.10.0"
 black = "^21.5b0"
 mypy = "^0.800"
@@ -83,6 +88,7 @@ omit = ["*__init__*"]
 fail_under = 70
 
 [tool.flakehell]
+extended_default_ignore = []
 application_import_names = ["underhood"]
 exclude = [".git", "docs", "tests", ".ipynb*", "*.ipynb", ".pytest_cache", ".venv"]
 max_line_length = 120
@@ -96,4 +102,4 @@ strictness = "short"
 pyflakes = ["+*"]
 pycodestyle = ["+*", "-E203","-W503", "-E231"]
 pylint = ["+*", "-E203", "-W503", "-E231"]
-mccabe = ["+*"]
+#mccabe = ["+*"]

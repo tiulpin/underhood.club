@@ -6,7 +6,6 @@ from gensim.corpora import Dictionary
 from gensim.models import LdaModel
 from nltk.corpus import stopwords
 from notion.block import BasicBlock
-from validators import url
 
 from underhood import LOCALE
 
@@ -68,7 +67,7 @@ def clean_tweets(tweets: list[str]) -> tuple[Dictionary, list[list[tuple[int, in
 
 def print_topics(tweets: list[str]) -> None:
     """Pretty simple topic-modeling with LDA model on tweets: print the results right into stdout.
-    TODO: make it better
+
     Args:
         tweets: list of tweets
     """
@@ -87,13 +86,10 @@ def print_topics(tweets: list[str]) -> None:
 
 
 def tweet_id_from_url(tweet_url: str) -> int:
-    """Obtain tweet id from environment (from URL).
-    e.g. https://twitter.com/dsunderhood/status/1384130447999787017?s=20 -> 1384130447999787017
-    """
+    """Obtain tweet id from environment (from URL), e.g. .../1384130447999787017?s=20 -> 1384130447999787017."""
     return int(tweet_url.split("/")[-1].split("?")[0]) if tweet_url and isinstance(tweet_url, str) else 0
 
 
 def slug_from_id(page_id: str) -> str:
-    """Extract Notion page slug from the given id.
-    e.g. lwuf-kj3r-fdw32-mnaks -> lwufkj3rfdw32mnaks"""
+    """Extract Notion page slug from the given id, e.g. lwuf-kj3r-fdw32-mnaks -> lwufkj3rfdw32mnaks."""
     return page_id.replace("-", "")

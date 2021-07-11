@@ -10,7 +10,7 @@ class LocalConfig:  # 🇷🇺
     week_title: str = "Архив недели"
     links_title: str = "Ссылки"
     thread: str = "Тред"
-    thread_count: int = 4
+    thread_count: int = 3
     days: tuple[str, ...] = (
         "Понедельник",
         "Вторник",
