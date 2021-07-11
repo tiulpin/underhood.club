@@ -1134,14 +1134,11 @@ toml = ">=0.10.0,<0.11.0"
 
 [[package]]
 name = "tenacity"
-version = "7.0.0"
+version = "8.0.0"
 description = "Retry code until it succeeds"
 category = "main"
 optional = false
-python-versions = "*"
-
-[package.dependencies]
-six = ">=1.9.0"
+python-versions = ">=3.6"
 
 [package.extras]
 doc = ["reno", "sphinx", "tornado (>=4.5)"]
@@ -1363,7 +1360,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "0fea6334b6f3f365c793e6f2c05f7889077944ab4df67fb2b8cc0b0bc4c8c3f9"
+content-hash = "cd8a2be43885023c304abd4271f71d869222ee9d6b5fbfa72fa82631f76d9e72"
 
 [metadata.files]
 appdirs = [
@@ -2097,8 +2094,8 @@ taskipy = [
     {file = "taskipy-1.8.1.tar.gz", hash = "sha256:7a2404125817e45d80e13fa663cae35da6e8ba590230094e815633653e25f98f"},
 ]
 tenacity = [
-    {file = "tenacity-7.0.0-py2.py3-none-any.whl", hash = "sha256:a0ce48587271515db7d3a5e700df9ae69cce98c4b57c23a4886da15243603dd8"},
-    {file = "tenacity-7.0.0.tar.gz", hash = "sha256:5bd16ef5d3b985647fe28dfa6f695d343aa26479a04e8792b9d3c8f49e361ae1"},
+    {file = "tenacity-8.0.0-py3-none-any.whl", hash = "sha256:352cc77bb3dffb070111c83c548ef5afb78acf93f89a28d753c5570066411b57"},
+    {file = "tenacity-8.0.0.tar.gz", hash = "sha256:6011fc69be55e0e20a9ceccdd8a7d969e42f892a81ea3a007de56e764d3551dd"},
 ]
 text-unidecode = [
     {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},
