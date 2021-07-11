@@ -8,6 +8,7 @@ from notion.client import NotionClient
 import pretty_errors
 import sentry_sdk
 from telegram import Bot, ParseMode
+from telegram.error import TelegramError
 from typer import Argument, Option, Typer
 
 from underhood.author import Author
@@ -119,7 +120,7 @@ def telethread(
                         text=f"[▸]({t['iv_url']}) {(t['message'])}",
                         parse_mode=ParseMode.MARKDOWN,
                     )
-                except Exception as e:
+                except TelegramError as e:
                     problems.append(e)
                     pass
                 t["sent"] = True

@@ -100,8 +100,9 @@ class Author:
             self.name = extract_name(self)
         if not self.avatar:
             self.imgur_client = ImgurClient(environ.get("IMGUR_API_ID"), environ.get("IMGUR_API_SECRET"))
-            image = self.user.data.profile_image_url.replace("_normal", "")
-            response = self.imgur_client.upload_from_path(image, anon=True)
+            response = self.imgur_client.upload_from_url(
+                self.user.data.profile_image_url.replace("_normal", ""), anon=True
+            )
             self.avatar = response["link"]
 
     def get_tweet(self, tweet_id: int) -> Tweet:

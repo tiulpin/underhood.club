@@ -40,6 +40,8 @@ jobs:
         TWITTER_TOKEN: ${{ secrets.TWITTER_TOKEN }}
         NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        IMGUR_API_ID: ${{ secrets.IMGUR_API_ID }}
+        IMGUR_API_SECRET: ${{ secrets.IMGUR_API_SECRET }}
         UNDERHOOD: itunderhood
     steps:
       - name: Pull latest repository
