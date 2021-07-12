@@ -41,7 +41,7 @@ docker = "docker build -t ghcr.io/tiulpin/underhood:latest -f Dockerfile ."
 lint = "flakehell lint && isort --check-only . && black --check . && mypy --ignore-missing-imports underhood"
 
 [tool.poetry.dev-dependencies]
-python-dotenv = "^0.15.0"
+python-dotenv = "^0.18.0"
 darglint = "^1.5.8"
 isort = "^5.7.0"
 flakehell = "^0.9.0"
