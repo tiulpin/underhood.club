@@ -3,3 +3,5 @@ exclude:
   - name: All
     paths:
       - .venv/
+      - .github/
+      - qodana/
