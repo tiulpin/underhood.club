@@ -1,4 +1,4 @@
-FROM python:3.9-slim-buster as app
+FROM python:3.10-rc-slim as app
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=off \
@@ -29,7 +29,7 @@ RUN python -c "import nltk; nltk.download('stopwords')"
 RUN mv /root/nltk_data /app/.venv/
 RUN poetry run python -m spacy download ru_core_news_sm
 
-FROM python:3.9-slim-buster as prod
+FROM python:3.10-rc-slim as prod
 ENV PATH="$PATH:/app/.venv/bin"
 COPY --from=app /app /app
 RUN apt-get update \
