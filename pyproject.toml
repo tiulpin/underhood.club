@@ -21,7 +21,7 @@ underhood = "underhood.__main__:app"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-requests = "^2.25.1"
+requests = "^2.26.0"
 spacy = "^3.0.3"
 scipy = "^1.6.1"
 gensim = "^3.8.3"
