@@ -1161,7 +1161,7 @@ toml = ">=0.10.0,<0.11.0"
 
 [[package]]
 name = "tenacity"
-version = "8.0.0"
+version = "8.0.1"
 description = "Retry code until it succeeds"
 category = "main"
 optional = false
@@ -1255,7 +1255,7 @@ telegram = ["requests"]
 
 [[package]]
 name = "tweepy"
-version = "4.0.0"
+version = "4.1.0"
 description = "Twitter library for Python"
 category = "main"
 optional = false
@@ -1268,15 +1268,15 @@ requests-oauthlib = ">=1.0.0,<2"
 
 [package.extras]
 async = ["aiohttp (>=3.7.3,<4)", "oauthlib (>=3.1.0,<4)"]
-dev = ["coveralls (>=2.1.0)", "tox (>=2.4.0)"]
+dev = ["coveralls (>=2.1.0)", "tox (>=3.14.0)"]
 socks = ["requests[socks] (>=2.11.1,<3)"]
-test = ["mock (>=1.0.1)", "nose (>=1.3.3)", "vcrpy (>=1.10.3)"]
+test = ["vcrpy (>=1.10.3)"]
 
 [package.source]
 type = "git"
 url = "https://github.com/tweepy/tweepy.git"
 reference = "master"
-resolved_reference = "8d6d51d528b86755e467cd810177ba585c4a8b73"
+resolved_reference = "4be74f4f84bf3c9a33cf7add409d359cf651114b"
 
 [[package]]
 name = "typed-ast"
@@ -1388,7 +1388,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "736da8c380fd423ba6d7375762f68b29cbfffdeaaeb971d4ce4702ae81ae9cda"
+content-hash = "a1596c32a063213443030b3fdfb594ac8e13aed369fb2288ffa00568a8350264"
 
 [metadata.files]
 appdirs = [
@@ -2166,8 +2166,8 @@ taskipy = [
     {file = "taskipy-1.8.1.tar.gz", hash = "sha256:7a2404125817e45d80e13fa663cae35da6e8ba590230094e815633653e25f98f"},
 ]
 tenacity = [
-    {file = "tenacity-8.0.0-py3-none-any.whl", hash = "sha256:352cc77bb3dffb070111c83c548ef5afb78acf93f89a28d753c5570066411b57"},
-    {file = "tenacity-8.0.0.tar.gz", hash = "sha256:6011fc69be55e0e20a9ceccdd8a7d969e42f892a81ea3a007de56e764d3551dd"},
+    {file = "tenacity-8.0.1-py3-none-any.whl", hash = "sha256:f78f4ea81b0fabc06728c11dc2a8c01277bfc5181b321a4770471902e3eb844a"},
+    {file = "tenacity-8.0.1.tar.gz", hash = "sha256:43242a20e3e73291a28bcbcacfd6e000b02d3857a9a9fff56b297a27afdc932f"},
 ]
 text-unidecode = [
     {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},
