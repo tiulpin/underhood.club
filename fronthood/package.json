@@ -26,6 +26,7 @@
     "posttest": "run-s build"
   },
   "dependencies": {
+    "@babel/runtime": "^7.15.4",
     "@google-cloud/firestore": "^4.10.1",
     "classnames": "^2.3.1",
     "date-fns": "^2.21.1",
