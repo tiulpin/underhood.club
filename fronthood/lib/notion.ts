@@ -46,8 +46,7 @@ export async function getPage(pageId: string): Promise<ExtendedRecordMap> {
     .filter(Boolean)
 
   const urls = Array.from(new Set(imageUrls))
-  const previewImageMap = await getPreviewImages(urls)
-  ;(recordMap as any).preview_images = previewImageMap
+  ;(recordMap as any).preview_images = await getPreviewImages(urls)
 
   const tweetIds: string[] = blockIds
     .map((blockId) => {
@@ -85,7 +84,7 @@ export async function getPage(pageId: string): Promise<ExtendedRecordMap> {
     }
   )
 
-  const tweetAstMap = tweetAsts.reduce((acc, { tweetId, tweetAst }) => {
+  ;(recordMap as any).tweetAstMap = tweetAsts.reduce((acc, { tweetId, tweetAst }) => {
     if (tweetAst) {
       return {
         ...acc,
@@ -95,8 +94,6 @@ export async function getPage(pageId: string): Promise<ExtendedRecordMap> {
       return acc
     }
   }, {})
-
-  ;(recordMap as any).tweetAstMap = tweetAstMap
 
   return recordMap
 }

@@ -132,6 +132,7 @@
 }
 
 /* only target safari */
+/*noinspection ALL*/
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   _::-webkit-full-page-media,
   _:future,
@@ -240,12 +241,6 @@
   opacity: 1;
 }
 
-.notion-link:hover {
-  border-width: 3px;
-  border-image: linear-gradient(90.68deg, #b439df 0.26%, #e5337e 102.37%);
-  border-image-slice: 1;
-}
-
 .notion-red_background,
 .notion-pink_background,
 .notion-blue_background,
@@ -257,8 +252,7 @@
 .notion-gray_background {
   padding: 0 0.5rem;
   margin: 0 -0.5rem 0 -0.25rem;
-  border-radius: 0.5rem;
-  border-bottom-left-radius: 0.125rem;
+  border-radius: 0.5rem 0.5rem 0.5rem 0.125rem;
   box-decoration-break: clone;
 
   background-color: none;
@@ -367,7 +361,7 @@
   backdrop-filter: saturate(180%) blur(8px);
 }
 
-.notion-bookmark:hover {
-  border-image: linear-gradient(90.68deg, #b439df 0.26%, #e5337e 102.37%);
-  border-image-slice: 1;
-}
+/*.notion-bookmark:hover {*/
+/*  border-image: linear-gradient(90.68deg, #b439df 0.26%, #e5337e 102.37%);*/
+/*  border-image-slice: 1;*/
+/*}*/

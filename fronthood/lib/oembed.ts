@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 import { parsePageId, getPageTitle } from 'notion-utils'
 import { getPage } from './notion'
 import * as config from './config'

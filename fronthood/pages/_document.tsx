@@ -2,6 +2,7 @@ import React from 'react'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { IconContext } from 'react-icons'
 
+// noinspection HtmlUnknownTarget,HtmlRequiredTitleElement
 export default class MyDocument extends Document {
   render() {
     return (
@@ -35,6 +36,10 @@ export default class MyDocument extends Document {
             />
 
             <link rel='manifest' href='/manifest.json' />
+            <meta name="theme-color" content="#000000" />
+            <meta property="og:image" content="/og_image.png" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:image" content="/og_image.png" />
           </Head>
 
           <body>
