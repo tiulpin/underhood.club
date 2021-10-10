@@ -1,0 +1,17 @@
+~version: "2.1"
+@debug:
+!path_not: /
+?exists://div[contains(@class, "notion-page-content")]
+
+author: /html/head/meta[@name="twitter:creator"]/@content 
+channel: /html/head/meta[@name="twitter:creator"]/@content
+title: /html/head/meta[@name="og:title"]/@content
+subtitle: /html/head/meta[@name="og:description"]/@content
+image_url: $cover/self::img/@src
+body:    //div[contains(@class, "notion-page-content")]
+
+@remove: $body//*[has-class("notion-table-of-contents-item")]
+@remove: //img[@class="notion-page-title-icon notion-page-icon"]
+@remove: $body//*[has-class("notion-bookmark")]
+@remove: //span[text()='Ссылки']
+@remove: //*[text()='Table of Contents']
