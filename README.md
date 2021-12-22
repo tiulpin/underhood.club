@@ -4,7 +4,7 @@
 
 The monorepo contains everything what's needed.
 
-[![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-380/)
+[![Python 3.9](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-380/)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 [![DeepSource](https://deepsource.io/gh/tiulpin/underhood.club.svg/?label=active+issues&show_trend=true&token=O2vpl_Y605V0lrWbaTTOTNTh)](https://deepsource.io/gh/tiulpin/underhood.club/?ref=repository-badge)
 [![License](https://img.shields.io/github/license/tiulpin/underhood.club)](https://github.com/tiulpin/underhood.club/blob/main/LICENSE)
@@ -25,8 +25,8 @@ That's why I've created one Python container, that includes three main packages/
 
 ### Articles
 
-- 🇬🇧 This README 
-- 🇷🇺 [The blogpost about the whole project](https://vas3k.club/project/4060/) (a bit outdated, will be updated soon)
+- 🇬🇧 This README and [the landing page](https://underhood.club/)
+- 🇷🇺 [The blogpost about the whole project](https://vas3k.club/project/4060/) (a bit outdated)
 
 ## 🛡 License
 
@@ -37,3 +37,4 @@ That's why I've created one Python container, that includes three main packages/
 - [`notion-py`](http://github.com/jamalex/notion-py/) – the project could not exist without this library
 - [`nextjs-notion-starter-kit`](https://github.com/transitive-bullshit/nextjs-notion-starter-kit) – the template is the base for *.underhood.club and thanks to it, NextJS and Vercel the user experience is fast and smooth
 - [`python-package-template`](https://github.com/TezRomacH/python-package-template) – got some GitHub configs/dependencies from there
+- imgur.com for being such cool image hosting

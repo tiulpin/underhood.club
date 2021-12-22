@@ -1,4 +1,5 @@
 """Everything related to Twitter API happens right here."""
+import string
 from collections import defaultdict
 from dataclasses import dataclass, InitVar
 from functools import cached_property
@@ -13,12 +14,12 @@ from underhood import LOCALE
 from underhood.tweet import UnderhoodTweet
 
 
-expansions = [
+EXPANSIONS = [
     "attachments.media_keys",
     "attachments.poll_ids",
     "entities.mentions.username",
 ]
-tweet_fields = [
+TWEET_FIELDS = [
     "author_id",
     "created_at",
     "source",
@@ -26,7 +27,7 @@ tweet_fields = [
     "referenced_tweets",
     "conversation_id",
 ]
-media_fields = ["media_key", "type", "url", "preview_image_url"]
+MEDIA_FIELDS = ["media_key", "type", "url", "preview_image_url"]
 
 
 @dataclass
@@ -41,6 +42,7 @@ class Author:
     avatar: str = ""
     first_id: InitVar[int] = 0
     until_id: InitVar[int] = 0
+    limit: int = 0
 
     def __post_init__(self, twitter_token: str, first_id: int = 0, until_id: int = 0):
         self.client = Client(twitter_token)
@@ -58,9 +60,9 @@ class Author:
                     id=self.user.data.id,
                     since_id=first_id,
                     until_id=until_id or None,
-                    expansions=expansions,
-                    tweet_fields=tweet_fields,
-                    media_fields=media_fields,
+                    expansions=EXPANSIONS,
+                    tweet_fields=TWEET_FIELDS,
+                    media_fields=MEDIA_FIELDS,
                 )
             )
         ):
@@ -94,10 +96,12 @@ class Author:
                 )
                 self.timeline.append(tweet)
                 self.conversations[tweet.conversation_id].append(tweet)
+                if self.limit and len(self.timeline) >= self.limit:
+                    break
         if not self.username:
-            self.username = extract_username(self) or self.author_hash
+            self.username = self.extract_username() or self.author_hash
         if not self.name:
-            self.name = extract_name(self)
+            self.name = self.extract_name()
         if not self.avatar:
             self.imgur_client = ImgurClient(environ.get("IMGUR_API_ID"), environ.get("IMGUR_API_SECRET"))
             response = self.imgur_client.upload_from_url(
@@ -108,7 +112,7 @@ class Author:
     def get_tweet(self, tweet_id: int) -> Tweet:
         """Get tweet from Twitter API by id."""
         return self.client.get_tweet(
-            id=tweet_id, expansions=expansions, tweet_fields=tweet_fields, media_fields=media_fields
+            id=tweet_id, expansions=EXPANSIONS, tweet_fields=TWEET_FIELDS, media_fields=MEDIA_FIELDS
         ).data
 
     @property
@@ -132,49 +136,38 @@ class Author:
         """Last author tweet property."""
         return self.timeline[-1]
 
+    def extract_name(self):
+        """Get author name from description or the first author tweet by using Spacy NER.
 
-def extract_username(author: Author) -> str:
-    """Get username from description or the first author tweet by searching for @.
+        Returns:
+            name if found else an empty string
+        """
 
-    Args:
-        author: Author class object
+        def search_name(d):
+            """Extract first found two-word string (real person name) from Spacy entities analysis."""
+            names = [x.text for x in d.ents if x.label_ == "PER" if len(x.text.split()) > 1]
+            return names[0] if names else ""
 
-    Returns:
-        username if found else an empty string
-    """
-    description, tweet = author.description, author.first_tweet
-    username = None
-    if "@" in description:
-        username = [
-            h[1:]
-            for h in description.replace("(", " ").replace(")", " ").replace(",", " ").split()
-            if h.startswith("@")
-        ][0]
-    elif e := tweet.mentions:
-        username = e[0]
-    return username or ""
+        description, tweet = self.description, self.first_tweet
+        nlp = load(LOCALE.spacy_model)
+        for text in (description, tweet.text):
+            doc = nlp(text)
+            name = search_name(doc)
+            if name:
+                break
+        return name
 
+    def extract_username(self) -> str:
+        """Get username from description or the first author tweet by searching for @.
 
-def extract_name(author: Author) -> str:
-    """Get author name from description or the first author tweet by using Spacy NER.
-
-    Args:
-        author: Author class object
-
-    Returns:
-        name if found else an empty string
-    """
-
-    def search_name(d):
-        """Extract first found two-word string (real person name) from Spacy entities analysis."""
-        names = [x.text for x in d.ents if x.label_ == "PER" if len(x.text.split()) > 1]
-        return names[0] if names else ""
-
-    description, tweet = author.description, author.first_tweet
-    nlp = load(LOCALE.spacy_model)
-    for text in (description, tweet.text):
-        doc = nlp(text)
-        name = search_name(doc)
-        if name:
-            break
-    return name
+        Returns:
+            username if found else an empty string
+        """
+        description, tweet = self.description, self.first_tweet
+        for text in (description, tweet.text):
+            if "@" in text:
+                text = text.translate(
+                    str.maketrans(string.punctuation.replace("@", ""), " " * (len(string.punctuation) - 1))
+                )
+                return text.split("@")[1].split()[0]
+        return ""

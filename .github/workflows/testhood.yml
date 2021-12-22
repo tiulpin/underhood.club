@@ -1,0 +1,51 @@
+name: 'test 🛠 pull request'
+
+on:
+  pull_request:
+    paths:
+      - 'underhood/**.py'
+      - 'poetry.lock'
+      - 'Dockerfile'
+  workflow_dispatch:
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          driver-opts: network=host
+      -
+        name: Build the latest container
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: localhost:5000/app/underhood:test
+      -
+        name: Test the latest container
+        run: |
+          mkdir -p dsunderhood && echo "{\"/authoring\":\"0e6c0e2f64ae40f495ef22358f1796de\",\"/archive\":\"4552b303cd4040998306d4e4676a3077\"}" > dsunderhood/urls.json
+          docker run --rm \
+            -v $(pwd):/data \
+            -e TWITTER_TOKEN=${{ secrets.TWITTER_TOKEN }} \
+            -e NOTION_TOKEN=${{ secrets.NOTION_TOKEN }} \
+            -e AVATAR="https://pbs.twimg.com/profile_images/1346883602638921730/y8m8_UXY_400x400.jpg" \
+            -e UNDERHOOD=dsunderhood \
+            --workdir /data \
+          localhost:5000/app/underhood:test dump --limit 10
