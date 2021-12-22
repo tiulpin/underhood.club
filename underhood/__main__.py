@@ -49,6 +49,8 @@ def dump(
 ):
     urls_path = Path(".") / underhood / "urls.json"
     telethreads_path = Path(".") / underhood / "telethreads.json"
+    telethreads = loads(telethreads_path.read_text()) if telethreads_path.exists() else None
+
     underhood_page = Page(
         author=Author(
             underhood,
@@ -67,6 +69,10 @@ def dump(
         ),
         urls=loads(urls_path.read_text()),
     )
+    if telethreads.get("current_last_tweet") == underhood_page.author.last_tweet.text:
+        print("Already dumped!")
+        return
+
     underhood_page.write()
     # TODO: okay, we definitely need some S3 here
     # also, move it to a separated module
@@ -74,6 +80,7 @@ def dump(
     if telethreads_path.exists():
         telethreads = loads(telethreads_path.read_text())
         telethreads["current_first_tweet"] = underhood_page.author.first_tweet.text
+        telethreads["current_last_tweet"] = underhood_page.author.last_tweet.text
         if datetime.today().weekday() == 1:
             telethreads["threads"] = []
         for t in underhood_page.threads:
