@@ -7,10 +7,15 @@ from pathlib import Path
 from notion.client import NotionClient
 import pretty_errors
 import sentry_sdk
+
+# noinspection PyPackageRequirements
 from telegram import Bot, ParseMode
+
+# noinspection PyPackageRequirements
 from telegram.error import TelegramError
 from typer import Argument, Option, Typer
 
+from underhood import LOCALE
 from underhood.author import Author
 from underhood.page import Page
 from underhood.utils import tweet_id_from_url
@@ -84,7 +89,7 @@ def dump(
                 "iv_url": f"https://t.me/iv?url={telethreads['base']}/{underhood_page.author.username}&"
                 f"{telethreads['rhash']}",
                 "url": f"{telethreads['base']}/{underhood_page.author.username}",
-                "message": "😎 Вся прошлая неделя выгружена в архив!",
+                "message": LOCALE.week_uploaded,
                 "sent": False,
             }
         )

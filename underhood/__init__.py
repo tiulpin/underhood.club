@@ -20,6 +20,7 @@ class LocalConfig:  # 🇷🇺
         "Суббота",
         "Воскресенье",
     )
+    week_uploaded: str = "😎 Вся прошлая неделя выгружена в архив!"
     td = timedelta(hours=3)
     spacy_model = "ru_core_news_sm"
     topics: int = 6
