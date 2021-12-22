@@ -1,4 +1,5 @@
 """Everything related to Twitter API happens right here."""
+import string
 from collections import defaultdict
 from dataclasses import dataclass, InitVar
 from functools import cached_property
@@ -41,6 +42,7 @@ class Author:
     avatar: str = ""
     first_id: InitVar[int] = 0
     until_id: InitVar[int] = 0
+    limit: int = 0
 
     def __post_init__(self, twitter_token: str, first_id: int = 0, until_id: int = 0):
         self.client = Client(twitter_token)
@@ -94,6 +96,8 @@ class Author:
                 )
                 self.timeline.append(tweet)
                 self.conversations[tweet.conversation_id].append(tweet)
+                if self.limit and len(self.timeline) >= self.limit:
+                    break
         if not self.username:
             self.username = self.extract_username() or self.author_hash
         if not self.name:
@@ -162,5 +166,8 @@ class Author:
         description, tweet = self.description, self.first_tweet
         for text in (description, tweet.text):
             if "@" in text:
-                return text.split("@")[1].replace("/", " ").split()[0]
+                text = text.translate(
+                    str.maketrans(string.punctuation.replace("@", ""), " " * (len(string.punctuation) - 1))
+                )
+                return text.split("@")[1].split()[0]
         return ""

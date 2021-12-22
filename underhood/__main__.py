@@ -45,6 +45,7 @@ def dump(
         None, "--until-tweet", "-ut", envvar="LAST_TWEET", help="Tweet to dump to [not included to dump]"
     ),
     no_email_auth: bool = Option(False, "-ne", envvar="NO_EMAIL"),
+    limit: int = Option(0, "--limit", "-l", envvar="LIMIT", help="Limit number of tweets to dump"),
 ):
     urls_path = Path(".") / underhood / "urls.json"
     telethreads_path = Path(".") / underhood / "telethreads.json"
@@ -57,6 +58,7 @@ def dump(
             twitter_token=twitter_token,
             first_id=tweet_id_from_url(first_tweet),
             until_id=tweet_id_from_url(until_tweet),
+            limit=limit,
         ),
         client=(
             NotionClient(token_v2=notion_token)
@@ -69,31 +71,32 @@ def dump(
     # TODO: okay, we definitely need some S3 here
     # also, move it to a separated module
     urls_path.write_text(dumps(underhood_page.urls, indent=4))
-    telethreads = loads(telethreads_path.read_text())
-    telethreads["current_first_tweet"] = underhood_page.author.first_tweet.text
-    if datetime.today().weekday() == 1:
-        telethreads["threads"] = []
-    for t in underhood_page.threads:
-        if all(m["message"] != t["message"] for m in telethreads["threads"]):
+    if telethreads_path.exists():
+        telethreads = loads(telethreads_path.read_text())
+        telethreads["current_first_tweet"] = underhood_page.author.first_tweet.text
+        if datetime.today().weekday() == 1:
+            telethreads["threads"] = []
+        for t in underhood_page.threads:
+            if all(m["message"] != t["message"] for m in telethreads["threads"]):
+                telethreads["threads"].append(
+                    {
+                        "iv_url": f"https://t.me/iv?url={telethreads['base']}{t['url']}&{telethreads['rhash']}",
+                        "url": f"{telethreads['base']}{t['url']}",
+                        "message": t["message"],
+                        "sent": False,
+                    }
+                )
+        if datetime.today().weekday() == 0:
             telethreads["threads"].append(
                 {
-                    "iv_url": f"https://t.me/iv?url={telethreads['base']}{t['url']}&{telethreads['rhash']}",
-                    "url": f"{telethreads['base']}{t['url']}",
-                    "message": t["message"],
+                    "iv_url": f"https://t.me/iv?url={telethreads['base']}/{underhood_page.author.username}&"
+                    f"{telethreads['rhash']}",
+                    "url": f"{telethreads['base']}/{underhood_page.author.username}",
+                    "message": LOCALE.week_uploaded,
                     "sent": False,
                 }
             )
-    if datetime.today().weekday() == 0:
-        telethreads["threads"].append(
-            {
-                "iv_url": f"https://t.me/iv?url={telethreads['base']}/{underhood_page.author.username}&"
-                f"{telethreads['rhash']}",
-                "url": f"{telethreads['base']}/{underhood_page.author.username}",
-                "message": LOCALE.week_uploaded,
-                "sent": False,
-            }
-        )
-    telethreads_path.write_text(dumps(telethreads, indent=4, ensure_ascii=False))
+        telethreads_path.write_text(dumps(telethreads, indent=4, ensure_ascii=False))
 
 
 @app.command()
