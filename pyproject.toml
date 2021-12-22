@@ -39,7 +39,6 @@ imgurpython = "^1.1.7"
 
 [tool.taskipy.tasks]
 docker = "docker build -t ghcr.io/tiulpin/underhood:latest -f Dockerfile ."
-lint = "flakehell lint && isort --check-only . && black --check . && mypy --ignore-missing-imports underhood"
 
 [tool.poetry.dev-dependencies]
 python-dotenv = "^0.19.2"

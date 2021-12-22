@@ -2,6 +2,10 @@ name: 'test 🛠 pull request'
 
 on:
   pull_request:
+    paths:
+      - 'underhood/**.py'
+      - 'poetry.lock'
+      - 'Dockerfile'
   workflow_dispatch:
 
 jobs:
