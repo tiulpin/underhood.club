@@ -5,13 +5,13 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "underhood"
-version = "2.4.0"
+version = "2021.3.0"
 description = "A 'small' utility, which download tweets and uploads to Notion, prototyped fastly for underhood.club"
 authors = ["tiulpin <viktor@tiulp.in>"]
 readme = "README.md"
 license = "Apache Software License 2.0"
 repository = "https://github.com/tiulpin/underhood.club"
-homepage = "https://github.com/tiulpin/underhood.club"
+homepage = "https://underhood.club"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/tiulpin/underhood.club/issues"
