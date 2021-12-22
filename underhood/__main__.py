@@ -69,7 +69,7 @@ def dump(
         ),
         urls=loads(urls_path.read_text()),
     )
-    if telethreads.get("current_last_tweet") == underhood_page.author.last_tweet.text:
+    if telethreads and telethreads.get("current_last_tweet") == underhood_page.author.last_tweet.text:
         print("Already dumped!")
         return
 
