@@ -1,0 +1,45 @@
+name: 'test 🛠 pull request'
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the latest container
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          push: false
+          tags: ghcr.io/tiulpin/underhood:latest
+      - name: Test latest container
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ghcr.io/tiulpin/underhood:latest
+          run: |
+            export FIRST_TWEET="https://twitter.com/ParrotCast/status/1347245253888253952?s=20"
+            export LAST_TWEET="https://twitter.com/ParrotCast/status/1416074694940401671?s=20"
+            export AVATAR="https://pbs.twimg.com/profile_images/1346883602638921730/y8m8_UXY_400x400.jpg"
+            export NAME=$(date)
+            export TWITTER_TOKEN=${{ secrets.TWITTER_TOKEN }}
+            export NOTION_TOKEN=${{ secrets.NOTION_TOKEN }}
+            export IMGUR_API_ID=${{ secrets.IMGUR_API_ID }}
+            export IMGUR_API_SECRET=${{ secrets.IMGUR_API_SECRET }}
+            export UNDERHOOD=dsunderhood
+            underhood dump
