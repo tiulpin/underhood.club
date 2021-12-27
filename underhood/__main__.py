@@ -1,4 +1,5 @@
 """Underhood entrypoint."""
+import warnings
 from datetime import datetime
 from json import dumps, loads
 from os import getenv
@@ -18,8 +19,7 @@ from typer import Argument, Option, Typer
 from underhood import LOCALE
 from underhood.author import Author
 from underhood.page import Page
-from underhood.utils import tweet_id_from_url
-
+from underhood.utils import tweet_id_from_url, is_url_ok
 
 pretty_errors.configure(filename_display=pretty_errors.FILENAME_EXTENDED, line_number_first=True, display_link=True)
 
@@ -122,6 +122,11 @@ def telethread(
         )
         bot.pinChatMessage(chat_id=telethreads["channel"], message_id=message.message_id)
     if telethreads["threads"] and any(not t["sent"] for t in telethreads["threads"]):
+        for t in filter(lambda t: not t["sent"], telethreads["threads"]):
+            if not is_url_ok(t["iv_url"]):
+                warnings.warn(f"{t['iv_url']} is not OK")
+                exit(1)
+
         bot.sendMessage(
             chat_id=telethreads["channel"],
             text=telethreads["greetings"],

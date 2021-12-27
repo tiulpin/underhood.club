@@ -2,6 +2,7 @@
 from collections import defaultdict
 from pprint import pprint
 
+import requests
 from gensim.corpora import Dictionary
 from gensim.models import LdaModel
 from nltk.corpus import stopwords
@@ -93,3 +94,13 @@ def tweet_id_from_url(tweet_url: str) -> int:
 def slug_from_id(page_id: str) -> str:
     """Extract Notion page slug from the given id, e.g. lwuf-kj3r-fdw32-mnaks -> lwufkj3rfdw32mnaks."""
     return page_id.replace("-", "")
+
+
+# noinspection PyBroadException
+def is_url_ok(url: str) -> bool:
+    """Check if the given URL is down."""
+    try:
+        r = requests.get(url)
+        return r.status_code == 200
+    except Exception:
+        return False
