@@ -1,8 +1,8 @@
 name: 'send 👩‍💻 telethreads'
 
 on:
-  schedule:
-    - cron: '0 7 * * *'
+  # schedule:
+  #   - cron: '0 7 * * *'
   workflow_dispatch:
 
 jobs:
