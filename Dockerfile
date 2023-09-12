@@ -13,9 +13,9 @@ ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
-        curl=7.74.0-1.3+deb11u1 \
-        build-essential=12.9 \
-        git=1:2.30.2-1 && \
+        curl \
+        build-essential \
+        git && \
     curl -sSL https://install.python-poetry.org | python3 -
 
 WORKDIR /app
