@@ -1,40 +1,31 @@
 <div align="center">
 
-# 🔥 [underhood.club](https://underhood.club/)
+# 🔥 underhood.club — Archived
 
-The monorepo contains everything what's needed.
-
-[![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3101/)
-[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
-[![DeepSource](https://deepsource.io/gh/tiulpin/underhood.club.svg/?label=active+issues&show_trend=true&token=O2vpl_Y605V0lrWbaTTOTNTh)](https://deepsource.io/gh/tiulpin/underhood.club/?ref=repository-badge)
-[![License](https://img.shields.io/github/license/tiulpin/underhood.club)](https://github.com/tiulpin/underhood.club/blob/main/LICENSE)
-[![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/9dli.svg)](https://status.underhood.club/)
+> **This project has been archived and is no longer maintained.**
+>
+> The content has moved to **[underhood.notion.site/main](https://underhood.notion.site/main)** — please go there instead.
 
 </div>
 
-### Motivation
+---
 
-I wanted a way of storing tweets per weeks, like [@abroadunderhood](http://abroadunderhood.ru), but I
-- don't want to host anything at all/spend resources for hostings
-- need a good way of editing existing pages
-- want it to look nice
-- am not a frontend-developer, know nothing about JavaScript
-- can dockerize things and make them work
+## What was this?
 
-That's why I've created one Python container, that includes three main packages/scripts, that help make a website like 🔥[underhood.club](https://underhood.club/) with a bit of NLP (NER for finding pages names)
+**underhood.club** was a platform that aggregated weekly rotating Twitter accounts in the Russian-speaking tech community — accounts like [@mobileunderhood](https://twitter.com/mobileunderhood), [@produnderhood](https://twitter.com/produnderhood), [@itunderhood](https://twitter.com/iunderhood), and [@dsunderhood](https://twitter.com/dsunderhood) — and published their tweets as a searchable, nicely formatted website.
 
-### Articles
+The project has no plans to evolve further and has been sunset in favor of Notion-hosted content at [underhood.notion.site/main](https://underhood.notion.site/main).
 
-- 🇬🇧 This README and [the landing page](https://underhood.club/)
-- 🇷🇺 [The blogpost about the whole project](https://vas3k.club/project/4060/) (a bit outdated)
+## How it worked
 
-## 🛡 License
+The stack was a Python monorepo with three main parts:
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftiulpin%2Funderhood.club.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftiulpin%2Funderhood.club?ref=badge_large)
+- **`underhood/`** — a Python package that used [`notion-py`](https://github.com/jamalex/notion-py/) to fetch tweets via the Twitter API, perform NLP (Named Entity Recognition to extract page titles), and sync content into Notion databases.
+- **`fronthood/`** — a [Next.js](https://nextjs.org/) frontend based on [`nextjs-notion-starter-kit`](https://github.com/transitive-bullshit/nextjs-notion-starter-kit), deployed on [Vercel](https://vercel.com/), that rendered Notion pages as a fast, user-friendly website for each `*.underhood.club` subdomain.
+- **GitHub Actions workflows** — scheduled jobs that ran the Python sync container periodically to keep each account's content up to date.
 
-## 🙏 Thanks
-- to all authors at [@mobileunderhood](https://twitter.com/mobileunderhood), [@produnderhood](https://twitter.com/produnderhood), [@itunderhood](https://twitter.com/iunderhood), [@dsunderhood](https://twitter.com/dsunderhood) for the great content, without it the website would not be that good
-- [`notion-py`](http://github.com/jamalex/notion-py/) – the project could not exist without this library
-- [`nextjs-notion-starter-kit`](https://github.com/transitive-bullshit/nextjs-notion-starter-kit) – the template is the base for *.underhood.club and thanks to it, NextJS and Vercel the user experience is fast and smooth
-- [`python-package-template`](https://github.com/TezRomacH/python-package-template) – got some GitHub configs/dependencies from there
-- imgur.com for being such cool image hosting
+The whole thing ran in a single Docker container with no persistent hosting required beyond Vercel for the frontend.
+
+## License
+
+[MIT](https://github.com/tiulpin/underhood.club/blob/main/LICENSE)
